@@ -1,0 +1,85 @@
+{
+    "items_num" : 2,
+    "items": [
+        {
+            "name": "Butter Chicken",
+            "id": 1,
+            "picture": "butterchicken.jpg",
+            "price": "5",
+            "bought": 3,
+            "desc": "Boneless tandoori chicken cooked with rich tomato cream gravy"
+        },
+        {
+            "name": "KungPao Chicken",
+            "id": 2,
+            "picture": "kungpao.jpg",
+            "price": "4",
+            "bought": 2,
+            "desc": "Spicy, sweet and incredibly delicious chicken with peanuts!"
+        },
+        {
+            "name": "Jamaican Jerk Chicken",
+            "id": 3,
+            "picture": "jamaicanjerkchick.jpg",
+            "price": "3",
+            "bought": 3,
+            "desc": "A well-seasoned grilled chicken with a Jamaican jerk marinade that has the perfect balance of heat, sweet and savory.            "
+        },
+        {
+            "name": "Hawaiian Pizza",
+            "id": 4,
+            "picture": "hawaiianpizza.jpg",
+            "price": "2",
+            "bought": 3,
+            "desc": "a pizza topped with tomato sauce, cheese, pineapple, and bacon or ham"
+        },
+        {
+            "name": "Japanese Sponge cake",
+            "id": 5,
+            "picture": "japanesespongecake.jpg",
+            "price": "5",
+            "bought": 3,
+            "desc": "a cake with a light, airy texture that seems incongruous with its rich flavor"
+        },
+        {
+            "name": "Lasagna",
+            "id": 6,
+            "picture": "lasagna.jpg",
+            "price": "5",
+            "bought": 3,
+            "desc": "Classic lasagna with ground beef, onion, Mozzarella, Ricotta, and Parmesan cheeses, tomato sauce and lasagna noodles"
+        },
+        {
+            "name": "Apple Pie",
+            "id": 7,
+            "picture": "applepie.jpg",
+            "price": "5",
+            "bought": 3,
+            "desc": "The Best Homemade Apple Pie With a flaky, buttery crust and filled with sliced apples, sugar, spices, and vanilla."
+        },
+        {
+            "name": "Mac and Cheese",
+            "id": 8,
+            "picture": "macandcheese.jpg",
+            "price": "5",
+            "bought": 3,
+            "desc": "Macaroni and cheese, with tangy goat cheese, Cheddar, and Parmesan, along with a mixture of herbs."
+        },
+        {
+            "name": "Chow Mein",
+            "id": 9,
+            "picture": "chowmein.jpg",
+            "price": "5",
+            "bought": 3,
+            "desc": "A Chinese-style dish of steamed or stir-fried vegetables, topped with shredded chicken, shrimp, etc., and served with fried noodles."
+        },
+        {
+            "name": "Pumpkin Pie",
+            "id": 10,
+            "picture": "pumpkinpie.jpg",
+            "price": "5",
+            "bought": 3,
+            "desc": "The best pumpkin pie with a tender, flaky crust and gently spiced pumpkin filling."
+        }
+    ]
+}

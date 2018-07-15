@@ -1,0 +1,31 @@
+{
+    "user_num": 2,
+    "users": [
+        {
+            "name": "Anthony Ho",
+            "img": "anthony.jpg",
+            "id": "1",
+            "username": "anthonyho",
+            "passwd": "machohack",
+            "buy_items": [2, 5],
+            "sell_items": [],
+            "rating": "9/10",
+            "type": "buyer"
+        },
+        {
+            "name": "Herry Xu",
+            "img": "herry.jpg",
+            "id": "2",
+            "username": "herryxu",
+            "passwd": "machohack",
+            "buy_items": [],
+            "sell_items": [2, 5],
+            "rating": "9/10",
+            "type": "seller",
+            "location": {
+                "lat": "49.286610", 
+                "long": "-123.136516"
+            } 
+        }
+    ]
+}

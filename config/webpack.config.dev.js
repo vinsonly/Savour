@@ -113,7 +113,9 @@ module.exports = {
           /\.json$/,
           /\.woff$/,
           /\.woff2$/,
-          /\.(ttf|svg|eot)$/
+          /\.(ttf|svg|eot)$/,
+          /\.sass$/,
+          /\.scss$/
         ],
         loader: 'url',
         query: {
@@ -122,6 +124,11 @@ module.exports = {
         }
       },
       // Process JS with Babel.
+      {
+        test: /\.sass$/,
+        include: paths.appSrc,
+        loaders: ["style", "css", "sass"]
+      },
       {
         test: /\.(js|jsx)$/,
         include: paths.appSrc,

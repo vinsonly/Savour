@@ -1,0 +1,64 @@
+{
+    "postings": [
+        {
+            "id": 1,
+            "userId": 1,
+            "itemId": 1,
+            "price": 10
+        },
+        {
+            "id": 2,
+            "userId": 2,
+            "itemId": 2,
+            "price": 9
+        },
+        {
+            "id": 3,
+            "userId": 1,
+            "itemId": 3,
+            "price": 3
+        },
+        {
+            "id": 4,
+            "userId": 2,
+            "itemId": 4,
+            "price": 2
+        },
+        {
+            "id": 5,
+            "userId": 1,
+            "itemId": 5,
+            "price": 1
+        },
+        {
+            "id": 6,
+            "userId": 2,
+            "itemId": 6,
+            "price": 4
+        },
+        {
+            "id": 7,
+            "userId": 1,
+            "itemId": 7,
+            "price": 6
+        },
+        {
+            "id": 8,
+            "userId": 2,
+            "itemId": 8,
+            "price": 7
+        },
+        {
+            "id": 9,
+            "userId": 1,
+            "itemId": 9,
+            "price": 9
+        },
+        {
+            "id": 10,
+            "userId": 2,
+            "itemId": 10,
+            "price": 2
+        }
+    ]
+}

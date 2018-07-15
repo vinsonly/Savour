@@ -1,8 +1,11 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import App from './App'
+import React from 'react';
+import { render } from 'react-dom';
+import { Router, browserHistory } from 'react-router';
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root')
-);
+import routes from './routes';
+
+import './styles/global.sass';
+import './favicon.ico';
+
+render(<Router history={browserHistory} routes={routes} />, document.getElementById('app'));
+
