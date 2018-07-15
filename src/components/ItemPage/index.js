@@ -123,6 +123,7 @@ class ItemPage extends Component {
     this.state.web3.eth.getAccounts((error, accounts) => {
       escrow.new({from: "0xA86DC04a1b9d5bc43550783bC0CA9CEf110b6A23"})
         .then(instance => {
+          alert("You have successfully created the smart contract. Please follow the next set of MetaMask instructions to pay for your order.")
           console.log(instance);
           escrowInstance = instance;
           let wei = this.state.web3.toWei(ethPrice, "ether");
@@ -138,9 +139,9 @@ class ItemPage extends Component {
         })
         .then(res => {
           console.log("deposits:"  + res);
+          alert("You have successfully deposited " + ethPrice + " please wait for the cook to confirm your order.");
         })
-      
-
+    
       
       
       // escrow.deployed().then((instance) => {
