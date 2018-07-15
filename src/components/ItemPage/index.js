@@ -12,14 +12,31 @@ import { browserHistory } from 'react-router';
 
 import Map from '../Map/index';
 
+import getWeb3 from '../../utils/getWeb3';
+
+import Escrow from '../../../build/contracts/Escrow.json'
+
 
 
 class ItemPage extends Component {
   constructor(props) {
     super(props)
-    
-    console.log(this.props)
 
+      fetch('https://api.coinmarketcap.com/v2/ticker/1027/')
+      .then(res => {
+        return res.json();
+      })
+      .then(body => {
+        console.log(body.data.quotes.USD.price);
+        this.setState({
+          ethusd: body.data.quotes.USD.price
+        })
+        window.state = this.state;
+      }) 
+      .catch(err => {
+        console.log(err);
+      });
+    
     let postingId = parseInt(this.props.routeParams.id);
 
     let thisPosting = postings.postings.find(function(posting) {
@@ -50,7 +67,8 @@ class ItemPage extends Component {
   }
 
   orderNow() {
-    console.log(this.state);
+
+    console.log(sessionStorage.getItem("web3"));
     
     if(sessionStorage.userId == null || parseInt(sessionStorage.userId) < 0) {
       alert("Please login to place an order.");
@@ -63,11 +81,89 @@ class ItemPage extends Component {
     } else {
       console.log("Fulfilling order");
       // call web3 here
-      this.createOrder().then(function () {
+
+      getWeb3
+      .then(results => {
+        this.setState({
+          web3: results.web3
+        })
+
+        let ethPrice;
+
+        if(this.state.ethusd) {
+          ethPrice = parseInt(this.state.posting.price)/this.state.ethusd;
+        } else {
+          ethPrice = parseInt(this.state.posting.price)/450;
+        }
+  
+        // Instantiate contract once web3 provided.
+        this.instantiateContract(ethPrice)
+      })
+      .catch(() => {
+        console.log('Error finding web3.');
         browserHistory.push('trades');
-      });
+
+      })
+
+      // this.createOrder().then(function () {
+      //   browserHistory.push('trades');
+      // });
     }
   }
+
+  instantiateContract(ethPrice) {
+    const contract = require('truffle-contract')
+    const escrow = contract(Escrow)
+    escrow.setProvider(this.state.web3.currentProvider)
+
+    // Declaring this for later so we can chain functions on SimpleStorage.
+    var escrowInstance;
+
+    // Get accounts.
+    this.state.web3.eth.getAccounts((error, accounts) => {
+      escrow.new({from: "0xA86DC04a1b9d5bc43550783bC0CA9CEf110b6A23"})
+        .then(instance => {
+          console.log(instance);
+          escrowInstance = instance;
+          let wei = this.state.web3.toWei(ethPrice, "ether");
+          console.log(wei);
+          return instance.deposit("0x442399335d14B7D1A56961fb3fBAd2C41a672a24", {
+            from: "0xA86DC04a1b9d5bc43550783bC0CA9CEf110b6A23",
+            value: wei
+          });
+        })
+        .then(result => {
+          console.log(result);
+          return escrowInstance.depositsOf.call("0x442399335d14B7D1A56961fb3fBAd2C41a672a24")
+        })
+        .then(res => {
+          console.log("deposits:"  + res);
+        })
+      
+
+      
+      
+      // escrow.deployed().then((instance) => {
+      //   escrowInstance = instance
+
+      //   console.log(escrowInstance);
+
+      //   let itemPrice = parseInt(this.state.item.price) / usdPrice;
+
+      //   console.log(itemPrice);
+
+      //   // deposits the item price into escrow
+      //   // return simpleStorageInstance.set(5, {from: accounts[0]})
+      // }).then((result) => {
+      //   // Get the amount of eth stored to confirm that it worked
+        
+        
+      //   // return simpleStorageInstance.get.call(accounts[0])
+      // })
+    });
+  }
+
+
 
   createOrder() {
     return fetch(this.state.server + "/orders", {
@@ -84,6 +180,8 @@ class ItemPage extends Component {
       return response.json;
     });
   }
+
+  
 
   render() {
     window.state = this.state;
