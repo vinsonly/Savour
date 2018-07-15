@@ -6,7 +6,13 @@ import { browserHistory } from 'react-router';
 import './styles.sass';
 
 class OpenPosting extends Component {
-
+  constructor(props) {
+    super(props);
+    let  JSON_SERVER = 'https://macho-json-server.herokuapp.com/';
+    this.state = {
+      server: JSON_SERVER
+    }
+  }
   getPosting(postingId, type) {
     var postings = postingsData['postings'];
     for ( var i in postings) {
@@ -30,6 +36,14 @@ class OpenPosting extends Component {
     return this.getItemInfo(itemId, "name");
   }
 
+  removePosting() {
+    return fetch(this.state.server + "postings/" +  this.props.postingId,{
+      method: "DELETE"
+    }).then(function(response){
+      return window.location.reload();
+    });
+  }
+
   render() {
     return (
       <div className="ptWrapper">
@@ -39,7 +53,7 @@ class OpenPosting extends Component {
           </h4>
         </div>
         <div className="tradeBtnWrapper lower">
-          <button className="declineBtn normalBtn">Remove</button>
+          <button className="declineBtn normalBtn" onClick={this.removePosting.bind(this)}>Remove</button>
         </div>
       </div>
     );
