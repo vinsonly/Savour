@@ -7,9 +7,8 @@
             "id": "1",
             "username": "anthonyho",
             "passwd": "machohack",
-            "buy_items": [2, 5],
-            "sell_items": [],
             "rating": "9/10",
+            "eaddress": "",
             "type": "buyer"
         },
         {
@@ -18,10 +17,37 @@
             "id": "2",
             "username": "herryxu",
             "passwd": "machohack",
-            "buy_items": [],
-            "sell_items": [2, 5],
             "rating": "9/10",
             "type": "seller",
+            "eaddress": "",
+            "location": {
+                "lat": "49.286610", 
+                "long": "-123.136516"
+            } 
+        },
+        {
+            "name": "Vinson Li",
+            "img": "herry.jpg",
+            "id": "3",
+            "username": "vinsonli",
+            "passwd": "machohack",
+            "rating": "7/10",
+            "type": "buyer",
+            "eaddress": "",
+            "location": {
+                "lat": "49.286610", 
+                "long": "-123.136516"
+            } 
+        },
+        {
+            "name": "Joseph Padayattil",
+            "img": "herry.jpg",
+            "id": "4",
+            "username": "joseph",
+            "passwd": "machohack",
+            "rating": "8/10",
+            "type": "seller",
+            "eaddress": "",
             "location": {
                 "lat": "49.286610", 
                 "long": "-123.136516"

@@ -17,19 +17,20 @@ class Trades extends Component {
     this.state = {
       modalOpened: false,
       orders:[],
+      postings:[],
       server: JSON_SERVER
     };
   }
 
   componentDidMount() {
-    var userSession = sessionStorage.getItem("userId");
-    if (!userSession) {
+    if (!parseInt(sessionStorage.getItem("userId"))) {
       console.log("no user session");
       browserHistory.push('login');
     }
     document.body.scrollTop = 0;
     document.querySelector('.menu').classList.remove('open');
-    this.getJsonData("orders");
+    this.getJsonOrderData();
+    this.getJsonPostingData();
   }
 
   closeModal() {
@@ -55,9 +56,14 @@ class Trades extends Component {
       </div>);
   }
 
-  getJsonData(type) {
-    return fetch(this.state.server + type).then(response => response.json())
+  getJsonOrderData() {
+    return fetch(this.state.server + "orders").then(response => response.json())
       .then(data => this.setState({orders: data}));
+  }
+
+  getJsonPostingData() {
+    return fetch(this.state.server + "postings").then(response => response.json())
+      .then(data => this.setState({postings: data}));
   }
 
   getAllOpenOrder() {
@@ -86,9 +92,9 @@ class Trades extends Component {
 
   openModal() {
     const scrollBar = document.querySelector('.scrollbar-measure');
-    const scrollBarWidth = scrollBar.offsetWidth - scrollBar.clientWidth;
+    // const scrollBarWidth = scrollBar.offsetWidth - scrollBar.clientWidth;
     document.body.classList.add('modal-opened');
-    document.body.style.marginRight = `${scrollBarWidth}px`;
+    document.body.style.marginRight = `100px`;
     this.setState({ modalOpened: true });
   }
 
@@ -118,7 +124,7 @@ class Trades extends Component {
 
   loadOpenPosting() {
     var self = this;
-    const list = postingData.postings.map(function (posting, i){
+    const list = this.state.postings.map(function (posting, i){
       if(posting.userId == sessionStorage.getItem("userId")) {
         return <OpenPosting postingId={posting.id} />;
       }

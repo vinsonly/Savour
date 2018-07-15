@@ -47,7 +47,7 @@ class OpenOrder extends Component {
     return fetch(this.state.server + "orders/" +  this.props.orderId,{
       method: "DELETE"
     }).then(function(response){
-      return window.location.reload();
+      browserHistory.push('/');
     });
   }
 

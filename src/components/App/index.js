@@ -7,10 +7,12 @@ import './styles.sass';
 import '../../styles/animation.sass';
 
 class App extends Component {
+
   render() {
     return (
       <div className="wrapper">
-        <Header />
+      <div className="text-right">{sessionStorage.getItem("userName")}</div>
+        <Header/>
         <ReactCSSTransitionGroup
           transitionName="content"
           transitionEnterTimeout={500}

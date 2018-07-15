@@ -11,6 +11,7 @@ class Login extends Component {
       passwd : ''
     };
     this.updateValue = this.updateValue.bind(this);
+    this.renderLoginOrLogOut = this.renderLoginOrLogOut.bind(this);
     this.login = this.login.bind(this);
   }
   componentDidMount() {
@@ -28,15 +29,42 @@ class Login extends Component {
     userFromDB.map(function(user){
       if(user.username === currentUsername) {
         sessionStorage.setItem("userId", user.id);
+        sessionStorage.setItem("userName", user.name);
         browserHistory.push('trades');
       }
     })
     // if not found, do nothing for now
+  }r
+
+  renderLoginOrLogOut() {
+    if (parseInt(sessionStorage.getItem("userId"))) {
+      return (
+        <div className="btnWrapper">
+      <div className="buttonWrapper text-center">
+      <button className="saveItemBtn" onClick={this.signOut}>Sign Out</button>
+    </div></div>);
+    } else {
+     return (<div className="btnWrapper">
+      <div className="inputWrapper">
+      <label htmlFor="itemName">Name:</label>
+      <input id="userName" name="username" type="text" className="userName" placeholder="Enter UserName" onChange={this.updateValue} required />
+    </div>
+    <div className="inputWrapper">
+      <label htmlFor="itemName">Password:</label>
+      <input id="passwd" name="passwd" type="password" className="passwd" placeholder="Enter Password" onChange={this.updateValue} required />
+    </div>
+        <div className="buttonWrapper text-center">
+            <button className="saveItemBtn" onClick={this.login}>Login</button>
+          </div>
+
+          </div>
+     );
+    }
   }
 
 
   signOut() {
-    sessionStorage.userId = 0;
+    sessionStorage.clear();
     browserHistory.push('/');
   }
  
@@ -44,23 +72,8 @@ class Login extends Component {
   render() {
     return (
       <div className="loginWrapper">
-        <h3 className="loginHeading text-center">Login with your Savour account</h3>
-        <div className="btnWrapper">
-        <div className="inputWrapper">
-            <label htmlFor="itemName">Name:</label>
-            <input id="userName" name="username" type="text" className="userName" placeholder="Enter UserName" onChange={this.updateValue} required />
-          </div>
-          <div className="inputWrapper">
-            <label htmlFor="itemName">Password:</label>
-            <input id="passwd" name="passwd" type="password" className="passwd" placeholder="Enter Password" onChange={this.updateValue} required />
-          </div>
-          <div className="buttonWrapper text-center">
-            <button className="saveItemBtn" onClick={this.login}>Login</button>
-          </div>
-          <div className="buttonWrapper text-center">
-            <button className="saveItemBtn" onClick={this.signOut}>Sign Out</button>
-          </div>
-        </div>
+        <h3 className="loginHeading text-center">Login / Logout with your Savour account</h3>
+        {this.renderLoginOrLogOut()}
       </div>
     );
   }

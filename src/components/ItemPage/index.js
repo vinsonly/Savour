@@ -70,7 +70,7 @@ class ItemPage extends Component {
 
     console.log(sessionStorage.getItem("web3"));
     
-    if(sessionStorage.userId == null || parseInt(sessionStorage.userId) < 1) {
+    if(sessionStorage.userId == null || parseInt(sessionStorage.userId) < 0) {
       alert("Please login to place an order.");
       
       browserHistory.push('login');

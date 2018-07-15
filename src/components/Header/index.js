@@ -7,7 +7,9 @@ class Header extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      login: this.props.isLog
+    };
   }
 
   componentWillMount() {
@@ -23,9 +25,13 @@ class Header extends Component {
         MENU
       </button>
     );
+    this.logInOutString = (this.state.login) ? "Sign In" : sessionStorage.getItem("userName") + " / Sign Out";
 
     this.loggedInMenu = (
       <div className="menu">
+        {/* <Link onlyActiveOnIndex={true} key={5} to="" activeClassName="activeNavLink" className="navLink">
+          {sessionStorage.getItem("userName")}
+        </Link> */}
         <Link onlyActiveOnIndex={true} key={1} to="/" activeClassName="activeNavLink" className="navLink">
           Home
         </Link>
@@ -36,7 +42,7 @@ class Header extends Component {
           Orders
         </Link>
         <Link onlyActiveOnIndex={true} key={4} to="/login" activeClassName="activeNavLink" className="navLink">
-          Login / Sign Out
+          Sign In / Sign Out
         </Link>
       </div>
     );

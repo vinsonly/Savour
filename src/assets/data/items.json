@@ -80,6 +80,22 @@
             "price": "5",
             "bought": 3,
             "desc": "The best pumpkin pie with a tender, flaky crust and gently spiced pumpkin filling."
+        },
+        {
+            "name": "Swedish Meatball",
+            "id": 11,
+            "picture": "meatball.jpg",
+            "price": "2",
+            "bought": 5,
+            "desc": "We have better meatballs than IKEA!"
+        },
+        {
+            "name": "Samosa",
+            "id": 12,
+            "picture": "samosa.jpg",
+            "price": "1",
+            "bought": 6,
+            "desc": "a triangular savory pastry fried in ghee or oil, containing spiced vegetables or meat."
         }
     ]
 }

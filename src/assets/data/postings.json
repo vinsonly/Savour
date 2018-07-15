@@ -2,7 +2,7 @@
     "postings": [
         {
             "id": 1,
-            "userId": 1,
+            "userId": 3,
             "itemId": 1,
             "price": 10
         },
@@ -14,7 +14,7 @@
         },
         {
             "id": 3,
-            "userId": 1,
+            "userId": 4,
             "itemId": 3,
             "price": 3
         },
@@ -26,7 +26,7 @@
         },
         {
             "id": 5,
-            "userId": 1,
+            "userId": 3,
             "itemId": 5,
             "price": 1
         },
@@ -38,7 +38,7 @@
         },
         {
             "id": 7,
-            "userId": 1,
+            "userId": 4,
             "itemId": 7,
             "price": 6
         },
@@ -50,7 +50,7 @@
         },
         {
             "id": 9,
-            "userId": 1,
+            "userId": 3,
             "itemId": 9,
             "price": 9
         },
@@ -59,6 +59,18 @@
             "userId": 2,
             "itemId": 10,
             "price": 2
+        },
+        {
+            "id": 11,
+            "userId": 3,
+            "itemId": 12,
+            "price": 3
+        },
+        {
+            "id": 12,
+            "userId": 2,
+            "itemId": 11,
+            "price": 1
         }
     ]
 }

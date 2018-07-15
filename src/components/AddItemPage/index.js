@@ -1,10 +1,38 @@
 import React, { Component, PropTypes } from 'react';
-
+import { browserHistory } from 'react-router';
 import './styles.sass';
 
 class AddItemPage extends Component {
   constructor(props) {
     super(props);
+    let  JSON_SERVER = 'https://macho-json-server.herokuapp.com/';
+    this.state = {
+      itemId: -1,
+      price: 0,
+      server: JSON_SERVER
+    }
+    this.updateValue = this.updateValue.bind(this);
+  }
+
+  createPosting() {
+    return fetch(this.state.server + "/postings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify({
+        price: this.state.price,
+        userId: sessionStorage.getItem("userId"),
+        itemId: this.state.itemIds
+      })
+    }).then(function(response){
+      console.log(response.json);
+      return response.json;
+    });
+  }
+
+  updateValue(evnt) {
+    this.setState({[evnt.target.name]: evnt.target.value});
   }
 
   componentDidMount() {
@@ -18,6 +46,16 @@ class AddItemPage extends Component {
     setTimeout(() => {
       this.props.close();
     }, 850);
+  }
+  save(){
+    this.createPosting().then(function() {
+      this.modalWrapper.classList.remove(this.props.openClass);
+    setTimeout(() => {
+      this.props.close();
+    }, 1000).then(function(){
+      browserHistory.push('trades');
+    });
+    });
   }
 
   render() {
@@ -41,11 +79,11 @@ class AddItemPage extends Component {
               <div className="priceWrapper">
                 <div className="inputWrapper">
                   <label htmlFor="itemPrice">Price:</label>
-                  <input min="0" id="itemPrice" name="itemPrice" type="number" className="itemPrice" placeholder="Enter Price" required />
+                  <input min="0" id="itemPrice" name="price" type="number" className="itemPrice" placeholder="Enter Price" onChange={this.updateValue}  required />
                 </div>
                 <div className="inputWrapper">
                   <label htmlFor="itemCurrency">Currency:</label>
-                  <input id="itemCurrency" name="itemCurrency" type="text" className="itemCurrency" placeholder="Enter Currency" />
+                  <input id="itemCurrency" name="itemId" type="text" className="itemCurrency" placeholder="Enter item id" onChange={this.updateValue} />
                 </div>
               </div>
               <div className="inputWrapper">
@@ -59,7 +97,7 @@ class AddItemPage extends Component {
             </div>
           </div>
           <div className="buttonWrapper">
-            <button className="saveItemBtn" onClick={this.close.bind(this)}>Save</button>
+            <button className="saveItemBtn" onClick={this.save.bind(this)}>Save</button>
             <button className="cancelItemBtn" onClick={this.close.bind(this)}>Cancel</button>
           </div>
         </div>
