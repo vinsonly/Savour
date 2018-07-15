@@ -51,6 +51,8 @@ class OpenOrder extends Component {
     });
   }
 
+  
+
   render() {
     return (
       <div className="trWrapper">
@@ -60,7 +62,7 @@ class OpenOrder extends Component {
           </h4>
         </div>
         <div className="tradeBtnWrapper lower">
-          <button className="cancelBtn normalBtn" onClick={this.fulfillOrder}>Receive Order</button>
+          <button className="cancelBtn normalBtn" onClick={this.fulfillOrder}>Received Order</button>
         </div>
       </div>
     );

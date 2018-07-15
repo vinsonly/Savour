@@ -138,6 +138,10 @@ class ItemPage extends Component {
           return escrowInstance.depositsOf.call("0x442399335d14B7D1A56961fb3fBAd2C41a672a24")
         })
         .then(res => {
+          // only called if successful
+          // add this transaction into the database
+
+          this.createOrder();
           console.log("deposits:"  + res);
           alert("You have successfully deposited " + ethPrice + " please wait for the cook to confirm your order.");
         })
