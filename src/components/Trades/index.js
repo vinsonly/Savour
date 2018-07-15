@@ -43,7 +43,7 @@ class Trades extends Component {
     var self = this;
     const list = this.state.orders.map(function (order, i){
       if(order.sellerId == sessionStorage.getItem("userId")) {
-        return (<ReceivedOrder orderId={order.id} buyerId={order.buyerId} itemId={order.itemId} />);
+        return (<ReceivedOrder orderId={order.id} buyerId={order.buyerId} itemId={order.itemId} accepted={order.accepted} />);
       }
     });
     console.log("list" + list);

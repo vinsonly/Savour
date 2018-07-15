@@ -174,7 +174,8 @@ class ItemPage extends Component {
       body: JSON.stringify({
         buyerId: sessionStorage.userId,
         sellerId: this.state.posting.userId,
-        itemId: this.state.posting.itemId
+        itemId: this.state.posting.itemId,
+        accepted: false
       })
     }).then(function(response){
       return response.json;
