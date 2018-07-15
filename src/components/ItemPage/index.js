@@ -56,6 +56,9 @@ class ItemPage extends Component {
       alert("Please login to place an order.");
       
       browserHistory.push('login');
+    
+    } else if(parseInt(sessionStorage.userId) == this.state.posting.userId) {
+      alert("You may not place an order on your own posting")
       
     } else {
       console.log("Fulfilling order");
