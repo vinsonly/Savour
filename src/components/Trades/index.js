@@ -85,9 +85,9 @@ class Trades extends Component {
 
   openModal() {
     const scrollBar = document.querySelector('.scrollbar-measure');
-    const scrollBarWidth = scrollBar.offsetWidth - scrollBar.clientWidth;
+    // const scrollBarWidth = scrollBar.offsetWidth - scrollBar.clientWidth;
     document.body.classList.add('modal-opened');
-    document.body.style.marginRight = `${scrollBarWidth}px`;
+    document.body.style.marginRight = `100px`;
     this.setState({ modalOpened: true });
   }
 

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-
+import { browserHistory } from 'react-router';
 import './styles.sass';
 
 class AddItemPage extends Component {
@@ -18,6 +18,14 @@ class AddItemPage extends Component {
     setTimeout(() => {
       this.props.close();
     }, 850);
+  }
+  save(){
+    this.modalWrapper.classList.remove(this.props.openClass);
+    setTimeout(() => {
+      this.props.close();
+    }, 850).then(function(){
+      browserHistory.push('trades');
+    });
   }
 
   render() {

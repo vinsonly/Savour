@@ -9,11 +9,10 @@ import '../../styles/animation.sass';
 class App extends Component {
 
   render() {
-    let isLogin= (parseInt(sessionStorage.getItem("userId"))); 
     return (
       <div className="wrapper">
       <div className="text-right">{sessionStorage.getItem("userName")}</div>
-        <Header isLog={isLogin} />
+        <Header/>
         <ReactCSSTransitionGroup
           transitionName="content"
           transitionEnterTimeout={500}
