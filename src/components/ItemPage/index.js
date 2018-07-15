@@ -52,7 +52,7 @@ class ItemPage extends Component {
   orderNow() {
     console.log(this.state);
     
-    if(sessionStorage.userId == null || parseInt(sessionStorage.userId) < 1) {
+    if(sessionStorage.userId == null || parseInt(sessionStorage.userId) < 0) {
       alert("Please login to place an order.");
       
       browserHistory.push('login');

@@ -22,8 +22,7 @@ class Trades extends Component {
   }
 
   componentDidMount() {
-    var userSession = sessionStorage.getItem("userId");
-    if (!userSession) {
+    if (!parseInt(sessionStorage.getItem("userId"))) {
       console.log("no user session");
       browserHistory.push('login');
     }
