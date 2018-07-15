@@ -13,6 +13,7 @@ class ReceivedOrder extends Component {
       server: JSON_SERVER
     };
     this.cancelOrder = this.cancelOrder.bind(this);
+    this.acceptOrder = this.acceptOrder.bind(this);
   }
 
   getItemInfo(itemId,type) {
@@ -44,12 +45,36 @@ class ReceivedOrder extends Component {
     return this.getItemInfo(itemId, "name");
   }
 
+  acceptOrder() {
+    return fetch(this.state.server + "orders/" + this.props.orderId, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify({
+        buyerId: this.props.buyerId,
+        sellerId: sessionStorage.userId,
+        itemId: this.props.itemId,
+        accepted: true
+      })
+    }).then(function(response){
+      return window.location.reload();
+    });
+  }
   cancelOrder() {
     return fetch(this.state.server + "orders/" +  this.props.orderId,{
       method: "DELETE"
     }).then(function(response){
       return window.location.reload();
     });
+  }
+  renderButton() {
+    if (!this.props.accepted) {
+      return (<div className="tradeBtnWrapper lower">
+      <button className="declineBtn normalBtn"onClick={this.acceptOrder} hidden={this.props.accepted}>Accept</button>
+        <button className="declineBtn normalBtn" onClick={this.cancelOrder} hidden={this.props.accepted}>Decline</button>
+      </div>);
+    }
   }
 
   render() {
@@ -60,9 +85,7 @@ class ReceivedOrder extends Component {
           <p>{this.getBuyerName()} have ordered <Link>{this.getItemName()}</Link> from you.</p>
           </h4>
         </div>
-        <div className="tradeBtnWrapper lower">
-          <button className="declineBtn normalBtn" onClick={this.cancelOrder}>Decline</button>
-        </div>
+        {this.renderButton()}
       </div>
     );
   }
