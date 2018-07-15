@@ -45,8 +45,6 @@ class Item extends Component {
 
     let picUrl = this.state.item.picture;
 
-    // console.log("picUrl = " + picUrl);
-
     return(
       <div className="item">
         <div className="content" id={this.state.id} onClick={()=>{

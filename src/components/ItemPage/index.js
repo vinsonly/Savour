@@ -22,8 +22,6 @@ class ItemPage extends Component {
 
     let postingId = parseInt(this.props.routeParams.id);
 
-    console.log(postingId);
-
     let thisPosting = postings.postings.find(function(posting) {
       return parseInt(posting.id) == parseInt(postingId);
     })
@@ -36,10 +34,13 @@ class ItemPage extends Component {
       return parseInt(user.id) == parseInt(thisPosting.userId);
     })
 
+    let  JSON_SERVER = 'https://macho-json-server.herokuapp.com';
+
     this.state = {
       posting: thisPosting, 
       item: thisItem,
-      user: thisUser
+      user: thisUser,
+      server: JSON_SERVER
     }
   }
 
@@ -59,8 +60,26 @@ class ItemPage extends Component {
     } else {
       console.log("Fulfilling order");
       // call web3 here
+      this.createOrder().then(function () {
+        browserHistory.push('trades');
+      });
     }
+  }
 
+  createOrder() {
+    return fetch(this.state.server + "/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify({
+        buyerId: sessionStorage.userId,
+        sellerId: this.state.posting.userId,
+        itemId: this.state.posting.itemId
+      })
+    }).then(function(response){
+      return response.json;
+    });
   }
 
   render() {

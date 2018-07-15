@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import itemsData from '../../assets/data/items.json';
-import ordersData from '../../assets/data/orders.json';
 import userData from '../../assets/data/users.json';
 import './styles.sass';
 
 class ReceivedOrder extends Component {
-
-  getOrder(orderId, type) {
-    var orders = ordersData['orders'];
-    for (var i in orders) {
-      if (orders[i].id == orderId) {
-        return orders[i][type];
-      }
-    }
+  constructor(props) {
+    super(props);
+    let  JSON_SERVER = 'https://macho-json-server.herokuapp.com/';
+    this.state = {
+      orderId: this.props.orderId,
+      server: JSON_SERVER
+    };
+    this.cancelOrder = this.cancelOrder.bind(this);
   }
 
   getItemInfo(itemId,type) {
@@ -35,13 +34,22 @@ class ReceivedOrder extends Component {
   }
 
   getBuyerName() {
-    var buyerId = this.getOrder(this.props.orderId, "buyerId");
+    var buyerId = this.props.buyerId;
+    console.log("buyerid" + buyerId);
     return this.getUserInfo(buyerId, "name");
   }
 
   getItemName() {
-    var itemId = this.getOrder(this.props.orderId, "itemId");
+    var itemId = this.props.itemId;
     return this.getItemInfo(itemId, "name");
+  }
+
+  cancelOrder() {
+    return fetch(this.state.server + "orders/" +  this.props.orderId,{
+      method: "DELETE"
+    }).then(function(response){
+      return window.location.reload();
+    });
   }
 
   render() {
@@ -53,9 +61,7 @@ class ReceivedOrder extends Component {
           </h4>
         </div>
         <div className="tradeBtnWrapper lower">
-          <button className="acceptBtn normalBtn">Accept</button>
-          <p>   </p>
-          <button className="declineBtn normalBtn">Decline</button>
+          <button className="declineBtn normalBtn" onClick={this.cancelOrder}>Decline</button>
         </div>
       </div>
     );

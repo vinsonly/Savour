@@ -8,14 +8,16 @@ import OpenPosting from '../OpenPosting/index';
 import AddItemPage from '../AddItemPage/index';
 import userData from "./../../assets/data/users.json";
 import postingData from "./../../assets/data/postings.json";
-import orderData from "./../../assets/data/orders.json";
 import './styles.sass';
 
 class Trades extends Component {
   constructor(props) {
     super(props);
+    let  JSON_SERVER = 'https://macho-json-server.herokuapp.com/';
     this.state = {
-      modalOpened: false
+      modalOpened: false,
+      orders:[],
+      server: JSON_SERVER
     };
   }
 
@@ -27,6 +29,7 @@ class Trades extends Component {
     }
     document.body.scrollTop = 0;
     document.querySelector('.menu').classList.remove('open');
+    this.getJsonData("orders");
   }
 
   closeModal() {
@@ -37,9 +40,9 @@ class Trades extends Component {
 
   getAllReceivedOrder() {
     var self = this;
-    const list = orderData.orders.map(function (order, i){
+    const list = this.state.orders.map(function (order, i){
       if(order.sellerId == sessionStorage.getItem("userId")) {
-        return (<ReceivedOrder orderId={order.id} />);
+        return (<ReceivedOrder orderId={order.id} buyerId={order.buyerId} itemId={order.itemId} />);
       }
     });
     console.log("list" + list);
@@ -52,11 +55,16 @@ class Trades extends Component {
       </div>);
   }
 
+  getJsonData(type) {
+    return fetch(this.state.server + type).then(response => response.json())
+      .then(data => this.setState({orders: data}));
+  }
+
   getAllOpenOrder() {
     var self = this;
-    const list = orderData.orders.map(function (order, i){
+    const list = this.state.orders.map(function (order, i){
       if(order.buyerId == sessionStorage.getItem("userId")) {
-        return (<OpenOrder orderId={order.id} />);
+        return (<OpenOrder orderId={order.id} sellerId={order.sellerId} itemId={order.itemId}/>);
       }
     });
     return (<div className="tradeReqWrapper">
@@ -65,6 +73,7 @@ class Trades extends Component {
       {list}
     </div>
   </div>);
+
   }
 
   getModal() {
@@ -130,7 +139,7 @@ class Trades extends Component {
       <div className="tradesWrapper">
         {this.getModal()}
         <div className="addTradeWrapper">
-          <Link to="myItems"><button className="tradeBtn allItemsBtn">My Items</button></Link>
+          <Link to="myItems"><button className="tradeBtn allItemsBtn"></button></Link>
           <button
             onClick={() => {
               this.openModal();
