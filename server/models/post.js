@@ -3,11 +3,25 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 // create a schema
-var userSchema = new Schema({
-  name: String,
-  username: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  admin: Boolean,
+var postSchema = new Schema({
+  name: {
+      type: String,
+      maxlength: 200,
+      required: true,
+  },
+  price: {
+      type: Schema.Types.Decimal128,
+      min: 0,
+      required: true
+  },
+  images: {
+    type: [String],
+    require: true
+  }, // array of links to the img
+  description: {
+      type: String,
+      maxlength: 500,
+  },
   location: {
     address: String,
     state: String,
@@ -15,13 +29,16 @@ var userSchema = new Schema({
     lng: String,
     lat: String
   },
-  ether_address: String,
+  userId: {
+    type: String,
+    require: true
+  },
   created_at: Date,
   updated_at: Date
 });
 
 // on every save, add the date
-userSchema.pre('save', function(next) {
+postSchema.pre('save', function(next) {
     // get the current date
     var currentDate = new Date();
   
@@ -33,11 +50,11 @@ userSchema.pre('save', function(next) {
       this.created_at = currentDate;
   
     next();
-});
+  });
 
 // the schema is useless so far
 // we need to create a model using it
-var User = mongoose.model('User', userSchema);
+var Post = mongoose.model('Post', postSchema);
 
 // make this available to our users in our Node applications
-module.exports = User;
+module.exports = Post;

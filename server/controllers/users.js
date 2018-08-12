@@ -6,16 +6,20 @@ module.exports = {
         let username = req.body.username;
         let password = req.body.password;
 
+        console.log("req.body", req.body);
+
         var newUser = User({
             name: name,
             username: username,
             password: password,
             admin: false
         });  
+
+        console.log(newUser);
         
         newUser.save(function(err) {
             if (err) {
-                return res.status(500).send(err);
+                return res.status(400).send(err);
             } else {
                 return res.send(newUser);
             }
@@ -34,21 +38,30 @@ module.exports = {
 
     update(req, res) {
 
-        let id = parseInt(req.body.id);
+        let id = req.body.id;
+
+        let body = req.body;
+        body.location = JSON.parse(req.body.location);
 
         User.findById(id, function(err, user){
             if (err) {
-                return res.status(500).send(err);
+                return res.status(404).send({
+                    message: `Cannot find user with id: ${id}`
+                });            
             } else {
-                user.name = req.body.name || user.name
-                user.username =  req.body.username || user.username
-                user.password = req.body.password || user.password
-                user.location = req.body.location || user.location
-                user.ether_address = req.body.ether_address || user.ether_address
+                for(key in user) {
+                    if(key == "name" || 
+                    key == "username" ||
+                    key == "password" ||
+                    key == "location" ||
+                    key == "ether_address") {
+                        user[key] = body[key] || user[key]
+                    }
+                }
 
                 user.save(function(err) {
                     if (err) {
-                        return res.status(500).send(err);
+                        return res.status(400).send(err);
                     } else {
                         return res.send(user);
                     }
@@ -58,24 +71,38 @@ module.exports = {
     },
 
     delete(req,res) {
-        let id = parseInt(req.body.id);
+        let id = req.body.id;
 
-        // get the user starlord55
         User.findById(id, function(err, user) {
             if (err) {
-                return res.status(500).send(err);
+                return res.status(404).send({
+                    message: `Cannot find user with id: ${id}`
+                });            
             } else {
-                // delete him
                 user.remove(function(err) {
                     if (err) {
                         return res.status(500).send(err);
                     } else {            
-                        console.log('User successfully deleted!');
-                        return res.send("User successfully deleted!")
+                        return res.send("User successfully deleted.")
                     }
                 }); 
             }  
         });
+    },
+
+    findById(req, res) {
+        let id = req.params.id;
+
+        User.findById(id, function(err, user) {
+            if (err) {
+                console.log(err);
+                return res.status(404).send({
+                    message: `Cannot find user with id: ${id}`
+                });            
+            } else {
+                return res.send(user);
+            }          
+        })
     }
 
 

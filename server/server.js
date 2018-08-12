@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 
-mongoose.connect('mongodb://localhost/27017');
+mongoose.connect('mongodb://localhost:27017/mydb', { useNewUrlParser: true });
 
 const app = express();
 app.use(bodyParser.json());
