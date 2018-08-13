@@ -1,29 +1,45 @@
 const User = require('../models').user
+const jwt = require('jsonwebtoken');
+
 
 module.exports = {
     create(req, res) {
         let name = req.body.name;
         let username = req.body.username;
         let password = req.body.password;
+        let email = req.body.email;
 
         console.log("req.body", req.body);
-
-        var newUser = User({
-            name: name,
-            username: username,
-            password: password,
-            admin: false
-        });  
-
-        console.log(newUser);
         
-        newUser.save(function(err) {
-            if (err) {
-                return res.status(400).send(err);
-            } else {
-                return res.send(newUser);
-            }
+        let saltRounds = 10;
+
+        bcrypt.genSalt(saltRounds, function(err, salt) {
+            bcrypt.hash(password, salt, function(err, hash) {
+                if(err || !hash) {
+                    res.status(400).send(err.message);
+                } else {
+                    console.log("hash:", hash);
+                    // save hash into the database;
+
+                    var newUser = User({
+                        name: name,
+                        username: username,
+                        email: email,
+                        password: hash,
+                        admin: false
+                    });  
+        
+                    newUser.save(function(err) {
+                        if (err) {
+                            return res.status(400).send(err);
+                        } else {
+                            return res.status(201).send(newUser);
+                        }
+                    });
+                }
+            });
         });
+
     },
 
     read(req, res) {
@@ -51,8 +67,6 @@ module.exports = {
             } else {
                 for(key in user) {
                     if(key == "name" || 
-                    key == "username" ||
-                    key == "password" ||
                     key == "location" ||
                     key == "ether_address") {
                         user[key] = body[key] || user[key]

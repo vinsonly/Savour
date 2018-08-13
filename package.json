@@ -22,6 +22,7 @@
   "homepage": "https://github.com/vinsonly/Savour#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "concurrently": "^3.6.1",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.2.7"

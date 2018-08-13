@@ -2,12 +2,13 @@
 
 const usersController = require('../controllers').users
 const postsController = require('../controllers').posts
+const authController = require('../controllers').auth
 
 module.exports = (app) => {
     // define all routes here
     
     // users
-    app.post('/api/user', usersController.create);
+    app.post('/api/user', usersController.create); 
     app.get('/api/users', usersController.read);
     app.post('/api/user/update', usersController.update);
     app.post('/api/user/delete', usersController.delete);
@@ -19,5 +20,7 @@ module.exports = (app) => {
     app.post('/api/post/update', postsController.update);
     app.post('/api/post/delete', postsController.delete);
     app.get('/api/post/:id', postsController.findById);
+
+    app.get('/api/login', authController.login);
 
 }
