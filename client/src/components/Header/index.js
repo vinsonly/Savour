@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import './styles.sass';
 
@@ -98,7 +98,7 @@ class Header extends Component {
     return (
       <header className="header">
         <h1>
-          <Link onlyActiveOnIndex={true} to="/" className="logo">
+          <Link to="/" className="logo">
             Savour
           </Link>
         </h1>

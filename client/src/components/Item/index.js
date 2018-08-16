@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 // import {Link} from 'react-router';
-import { browserHistory } from 'react-router';
+// import { browserHistory } from 'react-router';
+import {withRouter} from 'react-router-dom';
 
 import items from '../../assets/data/items.json';
 
@@ -48,7 +49,9 @@ class Item extends Component {
     return(
       <div className="item">
         <div className="content" id={this.state.id} onClick={()=>{
-          browserHistory.push('/item/' + this.state.id);
+          console.log(this.props);
+          // browserHistory.push('/item/' + this.state.id);
+          this.props.history.push('/item/' + this.state.id);
         }} >
           <img src={picUrl}></img>
         </div>
@@ -63,4 +66,4 @@ class Item extends Component {
 
 }
 
-export default Item;
+export default withRouter(Item);

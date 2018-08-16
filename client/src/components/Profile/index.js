@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { browserHistory } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import BasicInfo from '../BasicInfo/index';
 import OtherInfo from '../OtherInfo/index';
 import './styles.sass';
@@ -9,7 +9,7 @@ class Profile extends Component {
     var userSession = sessionStorage.getItem("userId");
     if (!userSession) {
       console.log("no user session");
-      browserHistory.push('login');
+      this.props.history.push('/login');
     }
     document.body.scrollTop = 0;
     document.querySelector('.menu').classList.remove('open');
@@ -24,4 +24,4 @@ class Profile extends Component {
   }
 }
 
-export default Profile;
+export default withRouter(Profile);

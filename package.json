@@ -6,7 +6,7 @@
   "scripts": {
     "client": "cd client && yarn start",
     "server": "nodemon /server/server.js",
-    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\" \"sudo service mongod restart\"",
     "start": "node server/server.js",
     "prod": "concurrently --kill-others-on-fail \"yarn start\" \"yarn client\""
   },
@@ -25,6 +25,7 @@
     "concurrently": "^3.6.1",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.3.0",
-    "mongoose": "^5.2.7"
+    "mongoose": "^5.2.7",
+    "react-router": "^4.3.1"
   }
 }

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
-import { browserHistory } from 'react-router';
+import { Link, withRouter } from 'react-router-dom';
 
 import OpenOrder from '../OpenOrder/index';
 import ReceivedOrder from '../ReceivedOrder/index';
@@ -25,7 +24,7 @@ class Trades extends Component {
   componentDidMount() {
     if (!parseInt(sessionStorage.getItem("userId"))) {
       console.log("no user session");
-      browserHistory.push('login');
+      this.props.history.push('login');
     }
     document.body.scrollTop = 0;
     document.querySelector('.menu').classList.remove('open');
@@ -162,4 +161,4 @@ class Trades extends Component {
   }
 }
 
-export default Trades;
+export default withRouter(Trades);

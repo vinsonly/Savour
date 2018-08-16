@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { browserHistory } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import './styles.sass';
 import users from './../../assets/data/users.json';
 
@@ -13,6 +13,7 @@ class Login extends Component {
     this.updateValue = this.updateValue.bind(this);
     this.renderLoginOrLogOut = this.renderLoginOrLogOut.bind(this);
     this.login = this.login.bind(this);
+    this.signOut = this.signOut.bind(this);
   }
   componentDidMount() {
     document.body.scrollTop = 0;
@@ -26,11 +27,12 @@ class Login extends Component {
   login() {
     var userFromDB = users['users'];
     var currentUsername = this.state.username;
+    let _this = this;
     userFromDB.map(function(user){
       if(user.username === currentUsername) {
         sessionStorage.setItem("userId", user.id);
         sessionStorage.setItem("userName", user.name);
-        browserHistory.push('trades');
+        _this.props.history.push('trades');
       }
     })
     // if not found, do nothing for now
@@ -65,7 +67,7 @@ class Login extends Component {
 
   signOut() {
     sessionStorage.clear();
-    browserHistory.push('/');
+    this.props.history.push('/')
   }
  
  
@@ -79,4 +81,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default withRouter(Login);

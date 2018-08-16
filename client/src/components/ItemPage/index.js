@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
+// import { Link } from 'react-router';
+import { Link, withRouter } from 'react-router-dom';
+
 import './styles.sass';
 
 import items from '../../assets/data/items.json';
@@ -8,7 +10,7 @@ import postings from '../../assets/data/postings.json';
 
 import users from '../../assets/data/users.json';
 
-import { browserHistory } from 'react-router';
+// import { browserHistory } from 'react-router';
 
 import Map from '../Map/index';
 
@@ -20,7 +22,9 @@ class ItemPage extends Component {
     
     console.log(this.props)
 
-    let postingId = parseInt(this.props.routeParams.id);
+    let postingId = parseInt(this.props.match.params.id);
+
+    this.orderNow = this.orderNow.bind(this);
 
     let thisPosting = postings.postings.find(function(posting) {
       return parseInt(posting.id) == parseInt(postingId);
@@ -51,11 +55,12 @@ class ItemPage extends Component {
 
   orderNow() {
     console.log(this.state);
+    let _this = this;
     
     if(sessionStorage.userId == null || parseInt(sessionStorage.userId) < 0) {
       alert("Please login to place an order.");
       
-      browserHistory.push('login');
+      this.props.history.push('login');
     
     } else if(parseInt(sessionStorage.userId) == this.state.posting.userId) {
       alert("You may not place an order on your own posting")
@@ -64,7 +69,7 @@ class ItemPage extends Component {
       console.log("Fulfilling order");
       // call web3 here
       this.createOrder().then(function () {
-        browserHistory.push('trades');
+        _this.props.history.push('trades');
       });
     }
   }
