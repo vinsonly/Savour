@@ -2,6 +2,20 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import './styles.sass';
 import users from './../../assets/data/users.json';
+import { login } from '../../redux/actions';
+import { connect } from 'react-redux'
+
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onLogin: () => {
+      dispatch(login({
+        _id: 2,
+        username: "test"
+      }))
+    } 
+  }
+}
 
 class Login extends Component {
   constructor(props) {
@@ -35,6 +49,7 @@ class Login extends Component {
         _this.props.history.push('trades');
       }
     })
+    this.props.onLogin();
     // if not found, do nothing for now
   }r
 
@@ -81,4 +96,4 @@ class Login extends Component {
   }
 }
 
-export default withRouter(Login);
+export default connect(null, mapDispatchToProps)(withRouter(Login));
