@@ -8,7 +8,7 @@ module.exports = (app) => {
     // define all routes here
     
     // users
-    app.post('/api/user', usersController.create); 
+    app.post('/api/user', [usersController.isUniqueEmailAndUsername, usersController.create]); 
     app.get('/api/users', usersController.read);
     app.post('/api/user/update', usersController.update);
     app.post('/api/user/delete', usersController.delete);

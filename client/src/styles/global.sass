@@ -161,10 +161,14 @@ label
   font-weight: 500
   font-family: roboto_mono, helvetica, sans-serif
 
+label.required 
+  color: red
+
 button
   outline: none
   border: none
   border-radius: 0
+  cursor: pointer
   &:focus, &:active
     outline: none
   &::-moz-focus-inner
@@ -196,3 +200,13 @@ input
   overflow-y: scroll
   position: absolute
   top: -9999px
+
+button.confirm-button
+  width: 150px
+  padding: 5px
+  border: 1px solid lightgrey
+  border: 1px lightgrey solid
+
+button.confirm-button:hover
+  box-shadow: 0 5px 10px 2px grey
+  color: grey

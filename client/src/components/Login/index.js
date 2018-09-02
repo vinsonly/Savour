@@ -6,6 +6,12 @@ import { login } from '../../redux/actions';
 import { connect } from 'react-redux'
 
 
+const mapStateToProps = (state) => {
+  return {
+      user: state.user
+  }
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
     onLogin: () => {
@@ -57,24 +63,28 @@ class Login extends Component {
     if (parseInt(sessionStorage.getItem("userId"))) {
       return (
         <div className="btnWrapper">
-      <div className="buttonWrapper text-center">
-      <button className="saveItemBtn" onClick={this.signOut}>Sign Out</button>
-    </div></div>);
+          <div className="buttonWrapper text-center">
+          <button className="saveItemBtn" onClick={this.signOut}>Sign Out</button>
+          </div>
+        </div>);
     } else {
-     return (<div className="btnWrapper">
-      <div className="inputWrapper">
-      <label htmlFor="itemName">Name:</label>
-      <input id="userName" name="username" type="text" className="userName" placeholder="Enter UserName" onChange={this.updateValue} required />
-    </div>
-    <div className="inputWrapper">
-      <label htmlFor="itemName">Password:</label>
-      <input id="passwd" name="passwd" type="password" className="passwd" placeholder="Enter Password" onChange={this.updateValue} required />
-    </div>
+     return (
+     <div className="btnWrapper">
+        <div className="inputWrapper">
+          <label htmlFor="itemName">Name:</label>
+          <input id="userName" name="username" type="text" className="userName" placeholder="Enter UserName" onChange={this.updateValue} required />
+        </div>
+        <div className="inputWrapper">
+          <label htmlFor="itemName">Password:</label>
+          <input id="passwd" name="passwd" type="password" className="passwd" placeholder="Enter Password" onChange={this.updateValue} required />
+        </div>
         <div className="buttonWrapper text-center">
-            <button className="saveItemBtn" onClick={this.login}>Login</button>
-          </div>
-
-          </div>
+          <button className="saveItemBtn" onClick={this.login}>Login</button>
+        </div>
+        {(!this.props.user) ? (
+          <a href="/register"><button>Register For a New Account Now</button></a>
+        ) : (<div />)}
+      </div>
      );
     }
   }
@@ -87,13 +97,16 @@ class Login extends Component {
  
  
   render() {
+
+    let header = (this.props.user) ? ("Login") : ("Sign Out")
+
     return (
       <div className="loginWrapper">
-        <h3 className="loginHeading text-center">Login / Logout with your Savour account</h3>
+        <h3 className="loginHeading text-center">Login</h3>
         {this.renderLoginOrLogOut()}
       </div>
     );
   }
 }
 
-export default connect(null, mapDispatchToProps)(withRouter(Login));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login));

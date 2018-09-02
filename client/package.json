@@ -57,7 +57,10 @@
     "react-dom": "^15.4.2",
     "react-redux": "^5.0.7",
     "react-router": "^3.0.0",
-    "react-router-dom": "^4.3.1"
+    "react-router-dom": "^4.3.1",
+    "redux": "^4.0.0",
+    "sweetalert2": "^7.26.12",
+    "validator": "^10.7.0"
   },
   "scripts": {
     "start": "node scripts/start.js",

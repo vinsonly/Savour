@@ -10,6 +10,7 @@ import '../../styles/animation.sass';
 import Main from '../Main/index';
 import Profile from '../Profile/index';
 import Login from '../Login/index';
+import SignUp from '../SignUp'
 import Trades from '../Trades/index';
 import ItemPage from '../ItemPage/index';
 import MyItems from '../MyItems/index';
@@ -40,6 +41,7 @@ class App extends Component {
             <Route path="/item/:id" component={ItemPage} />
             <Route path="/profile" component={Profile} />
             <Route path="/login" component={Login} />
+            <Route path="/register" component={SignUp} />
             <Route path="/trades" component={Trades} />
             <Route path="/myItems" component={MyItems} />
             <Route path="*" component={ErrorPage} />
