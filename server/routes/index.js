@@ -21,6 +21,6 @@ module.exports = (app) => {
     app.post('/api/post/delete', postsController.delete);
     app.get('/api/post/:id', postsController.findById);
 
-    app.get('/api/login', authController.login);
+    app.post('/api/login', authController.login);
 
 }

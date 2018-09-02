@@ -11,39 +11,44 @@ module.exports = {
         // verify the user's login information
         let errMsg = "Username/email and password does not match.";
 
-        return User
-            .or([
-                { email: req.body.user},
-                { username: req.body.user }  
-            ])
+        return User.findOne({ $or: [
+            { email: req.body.user },
+            { username: req.body.user }  
+        ]})
             .then(user => {
                 if(!user) {
                     return res.status(404).send({
                         message: "Can not find user with username/email: " + req.body.user
                     })
                 } else {
-
                     // verify the password of the user
                     let plainTextPassword = req.body.password;
-                    let passwordHash = user.password
+                    let passwordHash = user.password;
                     bcrypt.compare(plainTextPassword, passwordHash, function(err, result) {
-
                         if(err) {
                             console.log(err);
-                            return res.status(400).send(err);
+                            return res.status(500).send(err);
                         }
-
                         // add { expiresIn: '1h' } as 3rd param to set the token to expire
                         if(result == true) {
+                            console.log("user", user);
                             jwt.sign({user}, 'secretkey', { expiresIn: '1h' }, (err, token) => {
                                 if(err) {
                                     console.log(err);
-                                    return res.status(400).send(err);
+                                    return res.status(500).send(err);
                                 }
-
-                                let response = user.dataValues;
+                                let response = user;
                                 response.token = token;
-                                return res.send(response);
+                                console.log("response", response);
+                                return res.send({
+                                    _id: user._id,
+                                    name: user.name,
+                                    username: user.username,
+                                    email: user.email,
+                                    location: user.location,
+                                    ether_address: user.ether_address,
+                                    token: token
+                                });
                             });
                         } else {
                             return res.status(404).send({
