@@ -47,9 +47,12 @@ App.propTypes = {
 export default App;
 
 const Username = connect(mapStateToProps)(class Username extends Component {
+
+
   render() {
     let text;
-    if(!this.props.user || !this.props.name) {
+    console.log("this.props.user", this.props.user);
+    if(!this.props.user || !this.props.user.name) {
       text = ""
     } else {
       text = this.props.user.name;

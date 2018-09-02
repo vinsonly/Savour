@@ -75,6 +75,7 @@ class Header extends Component {
 
   signOut() {
     localStorage.removeItem('session_token');
+    localStorage.removeItem('state');
     this.props.signOut();
   }
 
@@ -124,7 +125,7 @@ class Header extends Component {
 
   setNav() {
     let loggedIn;
-    if (this.props.user) {
+    if (this.props.user && this.props.user.username) {
       loggedIn = true
     } else {
       loggedIn = false

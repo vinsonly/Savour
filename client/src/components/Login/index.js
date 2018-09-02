@@ -29,7 +29,6 @@ class Login extends Component {
     };
     this.updateValue = this.updateValue.bind(this);
     this.login = this.login.bind(this);
-    this.signOut = this.signOut.bind(this);
   }
 
   componentDidMount() {
@@ -85,12 +84,6 @@ class Login extends Component {
     })
   }
 
-  signOut() {
-    sessionStorage.clear();
-    localStorage.removeItem('session_token');
-    this.props.history.push('/')
-  }
- 
  
   render() {
     return (

@@ -20,6 +20,8 @@ function user(state = {}, action) {
             return Object.assign({}, state, {
                 user: null    
             })
+        default:   
+            return state
     }
 }
 
