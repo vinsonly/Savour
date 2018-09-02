@@ -8,6 +8,14 @@ import AddItemPage from '../AddItemPage/index';
 import userData from "./../../assets/data/users.json";
 import postingData from "./../../assets/data/postings.json";
 import './styles.sass';
+import { connect } from 'react-redux';
+
+const mapStateToProps = (state) => {
+  return {
+      user: state.user
+  }
+}
+
 
 class Trades extends Component {
   constructor(props) {
@@ -22,7 +30,7 @@ class Trades extends Component {
   }
 
   componentDidMount() {
-    if (!parseInt(sessionStorage.getItem("userId"))) {
+    if (!this.props.user.name) {
       console.log("no user session");
       this.props.history.push('login');
     }
@@ -161,4 +169,4 @@ class Trades extends Component {
   }
 }
 
-export default withRouter(Trades);
+export default connect(mapStateToProps)(withRouter(Trades));
