@@ -1,15 +1,81 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { signOut } from '../../redux/actions';
+import { connect } from 'react-redux';
 
 import './styles.sass';
+
+const mapStateToProps = (state) => {
+  return {
+      user: state.user
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    signOut: () => {
+      dispatch(signOut())
+    }
+  }
+}
 
 class Header extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      login: this.props.isLog
-    };
+    
+    if(props.user) {
+      this.state = {
+        loggedIn: true
+      }
+    } else {
+      this.state = {
+        loggedIn: false
+      }
+    }
+
+    this.setNav = this.setNav.bind(this);
+    this.setMenuState = this.setMenuState.bind(this);
+    this.signOut = this.signOut.bind(this);
+  }
+
+  loggedInMenu = (
+    <div className="menu">
+      {/* <Link onlyActiveOnIndex={true} key={5} to="" activeClassName="activeNavLink" className="navLink">
+        {sessionStorage.getItem("userName")}
+      </Link> */}
+      <Link onlyActiveOnIndex={true} key={1} to="/" activeClassName="activeNavLink" className="navLink">
+        Home
+      </Link>
+      {/* <Link onlyActiveOnIndex={true} key={2} to="/profile" activeClassName="activeNavLink" className="navLink">
+        Profile
+      </Link> */}
+      <Link onlyActiveOnIndex={true} key={3} to="/trades" activeClassName="activeNavLink" className="navLink">
+        Orders
+      </Link>
+      <Link onlyActiveOnIndex={true} key={5} to="#" onClick={this.signOut} activeClassName="activeNavLink" className="navLink">
+        Sign Out
+      </Link>
+    </div>
+  );
+  
+  loggedOutMenu = (
+    <div className="menu loginMenu">
+    <Link onlyActiveOnIndex={true} key={1} to="/" activeClassName="activeNavLink" className="navLink">
+        Home
+      </Link>
+      <Link onlyActiveOnIndex={true} key={2} to="/login" activeClassName="activeNavLink" className="navLink">
+        Log In
+      </Link>
+      <Link onlyActiveOnIndex={true} key={3} to="/register" activeClassName="activeNavLink" className="navLink">
+        Register
+      </Link>
+    </div>
+  );
+
+  signOut() {
+    localStorage.removeItem('session_token');
+    this.props.signOut();
   }
 
   componentWillMount() {
@@ -25,40 +91,14 @@ class Header extends Component {
         MENU
       </button>
     );
-    this.logInOutString = (this.state.login) ? "Sign In" : sessionStorage.getItem("userName") + " / Sign Out";
-
-    this.loggedInMenu = (
-      <div className="menu">
-        {/* <Link onlyActiveOnIndex={true} key={5} to="" activeClassName="activeNavLink" className="navLink">
-          {sessionStorage.getItem("userName")}
-        </Link> */}
-        <Link onlyActiveOnIndex={true} key={1} to="/" activeClassName="activeNavLink" className="navLink">
-          Home
-        </Link>
-        {/* <Link onlyActiveOnIndex={true} key={2} to="/profile" activeClassName="activeNavLink" className="navLink">
-          Profile
-        </Link> */}
-        <Link onlyActiveOnIndex={true} key={3} to="/trades" activeClassName="activeNavLink" className="navLink">
-          Orders
-        </Link>
-        <Link onlyActiveOnIndex={true} key={4} to="/login" activeClassName="activeNavLink" className="navLink">
-          Sign In / Sign Out
-        </Link>
-      </div>
-    );
-
-    this.loggedOutMenu = (
-      <div className="menu loginMenu">
-        <Link onlyActiveOnIndex={true} key={5} to="/login" activeClassName="activeNavLink" className="navLink">
-          Log In
-        </Link>
-      </div>
-    );
 
     this.setNav();
     this.setMenuState(window.innerWidth);
     this.previousWidth = window.innerWidth;
+  }
 
+  componentDidUpdate() {
+    this.setNav();
   }
 
   componentDidMount() {
@@ -83,18 +123,26 @@ class Header extends Component {
   }
 
   setNav() {
-    // check for auth here
-    // const isLoggedin = sessionStorage.userId != null;
-    // if (isLoggedin) {
-    //   this.setState({ nav: this.loggedInMenu });
-    // } else {
-    //   this.setState({ nav: this.loggedOutMenu });
-    // }
-    this.setState({ nav: this.loggedInMenu });
+    let loggedIn;
+    if (this.props.user) {
+      loggedIn = true
+    } else {
+      loggedIn = false
+    }
 
+    if(loggedIn !== this.state.loggedIn) {
+      this.setState({ loggedIn: loggedIn });
+    }
   }
 
   render() {
+    let menu;
+    if(this.state.loggedIn) {
+      menu = this.loggedInMenu;
+    } else {
+      menu = this.loggedOutMenu;
+    }
+
     return (
       <header className="header">
         <h1>
@@ -103,10 +151,10 @@ class Header extends Component {
           </Link>
         </h1>
         {this.state.menuActive ? this.menuButton: ""}
-        {this.state.nav}
+        {menu}
       </header>
     );
   }
 }
 
-export default Header;
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

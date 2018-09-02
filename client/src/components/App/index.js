@@ -6,15 +6,14 @@ import Header from '../Header/index';
 import Footer from '../Footer/index';
 import './styles.sass';
 import '../../styles/animation.sass';
+import Routes from '../routes';
+import { connect } from 'react-redux';
 
-import Main from '../Main/index';
-import Profile from '../Profile/index';
-import Login from '../Login/index';
-import SignUp from '../SignUp'
-import Trades from '../Trades/index';
-import ItemPage from '../ItemPage/index';
-import MyItems from '../MyItems/index';
-import ErrorPage from '../ErrorPage/index';
+const mapStateToProps = (state) => {
+  return {
+      user: state.user
+  }
+}
 
 class App extends Component {
 
@@ -26,27 +25,13 @@ class App extends Component {
   render() {
     return (
       <div className="wrapper">
-      <div className="text-right">{sessionStorage.getItem("userName")}</div>
+        <Username />
         <Header/>
         <ReactCSSTransitionGroup
           transitionName="content"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
-          {/* <div key={this.props.location.pathname}>
-            {this.props.children}
-          </div> */}
-          <Switch>
-          
-            <Route exact path="/" component={Main} />
-            <Route path="/item/:id" component={ItemPage} />
-            <Route path="/profile" component={Profile} />
-            <Route path="/login" component={Login} />
-            <Route path="/register" component={SignUp} />
-            <Route path="/trades" component={Trades} />
-            <Route path="/myItems" component={MyItems} />
-            <Route path="*" component={ErrorPage} />
-          
-          </Switch>
+          <Routes />
         </ReactCSSTransitionGroup>
       </div>
     );
@@ -60,3 +45,20 @@ App.propTypes = {
 };
 
 export default App;
+
+const Username = connect(mapStateToProps)(class Username extends Component {
+  render() {
+    let text;
+    if(!this.props.user || !this.props.name) {
+      text = ""
+    } else {
+      text = this.props.user.name;
+    }
+    
+    return (
+      <div className="text-right">{text}</div>
+    )
+  }
+});
+
+

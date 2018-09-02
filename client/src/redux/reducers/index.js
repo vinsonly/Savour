@@ -9,8 +9,16 @@ import { combineReducers } from 'redux'
 function user(state = {}, action) {
     switch(action.type) {
         case LOGIN:
+            console.log("action.user", action.user);
+            console.log("state", state);
+            let value = Object.assign({}, state, 
+                action.user
+            )
+            console.log("value", value);
+            return value;
+        case SIGN_OUT:
             return Object.assign({}, state, {
-                user: action.user
+                user: null    
             })
     }
 }

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import './styles.sass';
-import users from './../../assets/data/users.json';
 import { login } from '../../redux/actions';
 import { connect } from 'react-redux';
 import swal from 'sweetalert2';
@@ -67,7 +66,10 @@ class Login extends Component {
 
             // set user into state
             let user = body
-            delete user.token
+            delete user.token;
+            delete user.__proto__
+            console.log("user", user);
+            console.log("proto", body.__proto__);
             _this.props.onLogin(user);
 
             _this.props.history.push('/');
@@ -91,9 +93,6 @@ class Login extends Component {
  
  
   render() {
-
-    let header = (this.props.user) ? ("Login") : ("Sign Out")
-
     return (
       <div className="loginWrapper">
         <h3 className="loginHeading text-center">Login</h3>
@@ -109,7 +108,7 @@ class Login extends Component {
           <div className="buttonWrapper text-center">
             <button className="saveItemBtn" onClick={this.login}>Login</button>
           </div>
-          <a href="/register"><button>Register For a New Account Now</button></a>
+          {/* <a href="/register"><button>Register For a New Account Now</button></a> */}
         </div>
       </div>
     );
