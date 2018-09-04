@@ -129,6 +129,27 @@ module.exports = {
                 return res.send(post);
             }          
         })
+    },
+
+    getSellerPosts(req, res) {
+        let sellerId = req.params.sellerId;
+
+        User.findById(sellerId, function(err, user) {
+            if(err || !user) {
+                return res.status(404).send({
+                    message: `Cannot find user with id: ${id}`
+                });
+            } else {
+                // find all orders where the user is a buyer
+                Post.find({ userId: sellerId }, function(err, posts) {
+                    if(err) {
+                        return res.status(500).send(err); 
+                    } else {
+                        return res.send(posts);
+                    }
+                })
+            }
+        })
     }
 
 

@@ -104,9 +104,49 @@ module.exports = {
                 return res.send(order);
             }          
         })
+    },
+
+    getBuyerOrders(req, res) {
+        let buyerId = req.params.buyerId;
+
+        User.findById(buyerId, function(err, user) {
+            if(err || !user) {
+                return res.status(404).send({
+                    message: `Cannot find user with id: ${id}`
+                });
+            } else {
+                // find all orders where the user is a buyer
+                Order.find({ buyerId: buyerId }, function(err, orders) {
+                    if(err) {
+                        return res.status(500).send(err); 
+                    } else {
+                        return res.send(orders);
+                    }
+                })
+            }
+        })
+    },
+
+    getSellerOrders(req, res) {
+        let sellerId = req.params.sellerId;
+
+        User.findById(sellerId, function(err, user) {
+            if(err || !user) {
+                return res.status(404).send({
+                    message: `Cannot find user with id: ${id}`
+                });
+            } else {
+                // find all orders where the user is a buyer
+                Order.find({ sellerId: sellerId }, function(err, orders) {
+                    if(err) {
+                        return res.status(500).send(err); 
+                    } else {
+                        return res.send(orders);
+                    }
+                })
+            }
+        })
     }
-
-
     
     
 }
