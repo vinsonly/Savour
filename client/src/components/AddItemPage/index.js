@@ -1,5 +1,6 @@
-import React, { Component, PropTypes } from 'react';
-import { browserHistory } from 'react-router';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import SearchMap from '../SearchMap'; 
 import './styles.sass';
 
 class AddItemPage extends Component {
@@ -7,7 +8,8 @@ class AddItemPage extends Component {
     super(props);
     let  JSON_SERVER = 'https://macho-json-server.herokuapp.com/';
     this.state = {
-      itemId: -1,
+      name: "",
+      description: "",
       price: 0,
       server: JSON_SERVER
     }
@@ -31,8 +33,8 @@ class AddItemPage extends Component {
     });
   }
 
-  updateValue(evnt) {
-    this.setState({[evnt.target.name]: evnt.target.value});
+  updateValue(event) {
+    this.setState({[event.target.name]: event.target.value});
   }
 
   componentDidMount() {
@@ -48,14 +50,17 @@ class AddItemPage extends Component {
     }, 850);
   }
   save(){
-    this.createPosting().then(function() {
-      this.modalWrapper.classList.remove(this.props.openClass);
-    setTimeout(() => {
-      this.props.close();
-    }, 1000).then(function(){
-      browserHistory.push('trades');
-    });
-    });
+
+    console.log("state", this.state);
+
+    // this.createPosting().then(function() {
+    //   this.modalWrapper.classList.remove(this.props.openClass);
+    // setTimeout(() => {
+    //   this.props.close();
+    // }, 1000).then(function(){
+    //   browserHistory.push('trades');
+    // });
+    // });
   }
 
   render() {
@@ -74,26 +79,27 @@ class AddItemPage extends Component {
             <div className="itemInfoWrapper">
               <div className="inputWrapper">
                 <label htmlFor="itemName">Name:</label>
-                <input id="itemName" name="itemName" type="text" className="itemName" placeholder="Enter Name" required />
+                <input id="itemName" name="name" type="text" placeholder="Enter Name" value={this.state.name} onChange={this.updateValue} required />
               </div>
               <div className="priceWrapper">
-                <div className="inputWrapper">
-                  <label htmlFor="itemPrice">Price:</label>
-                  <input min="0" id="itemPrice" name="price" type="number" className="itemPrice" placeholder="Enter Price" onChange={this.updateValue}  required />
+                <div className="inputWrapper" style={{margin: 0}}>
+                  <label htmlFor="itemPrice">Price: (CAD)</label>
+                  <input min="0" id="price" name="price" type="number" placeholder="Enter Price" onChange={this.updateValue} value={this.state.price} required />
                 </div>
-                <div className="inputWrapper">
+                {/* <div className="inputWrapper">
                   <label htmlFor="itemCurrency">Currency:</label>
                   <input id="itemCurrency" name="itemId" type="text" className="itemCurrency" placeholder="Enter item id" onChange={this.updateValue} />
-                </div>
+                </div> */}
               </div>
               <div className="inputWrapper">
                 <label htmlFor="itemDescription">Description:</label>
-                <textarea name="itemDescription" id="itemDescription" className="itemDescription" placeholder="Enter Item Description" />
+                <textarea name="description" id="itemDescription" placeholder="Enter Item Description" onChange={this.updateValue} value={this.state.description} />
               </div>
-              <div className="inputWrapper">
+              {/* <div className="inputWrapper">
                 <label htmlFor="itemTags">Tags(Comma Separated):</label>
                 <textarea name="itemTags" id="itemTags" className="itemTags" placeholder="Enter Tags" />
-              </div>
+              </div> */}
+              <SearchMap />
             </div>
           </div>
           <div className="buttonWrapper">

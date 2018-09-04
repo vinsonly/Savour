@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-// import {Link} from 'react-router';
-// import { browserHistory } from 'react-router';
+
 import {withRouter} from 'react-router-dom';
 
 import items from '../../assets/data/items.json';

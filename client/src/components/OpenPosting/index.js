@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
 import itemsData from '../../assets/data/items.json';
 import postingsData from '../../assets/data/postings.json';
-import { browserHistory } from 'react-router';
 import './styles.sass';
 
 class OpenPosting extends Component {

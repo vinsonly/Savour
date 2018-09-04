@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import itemsData from '../../assets/data/items.json';
 import userData from '../../assets/data/users.json';
 import './styles.sass';

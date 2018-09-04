@@ -1,5 +1,6 @@
-import React, { Component, PropTypes } from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 
 import Header from '../Header/index';
@@ -27,12 +28,12 @@ class App extends Component {
       <div className="wrapper">
         <Username />
         <Header/>
-        <ReactCSSTransitionGroup
+        <CSSTransitionGroup
           transitionName="content"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
           <Routes />
-        </ReactCSSTransitionGroup>
+        </CSSTransitionGroup>
       </div>
     );
   }

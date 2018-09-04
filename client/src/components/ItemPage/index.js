@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import { Link } from 'react-router';
 import { Link, withRouter } from 'react-router-dom';
 
 import './styles.sass';
@@ -9,8 +8,6 @@ import items from '../../assets/data/items.json';
 import postings from '../../assets/data/postings.json';
 
 import users from '../../assets/data/users.json';
-
-// import { browserHistory } from 'react-router';
 
 import Map from '../Map/index';
 

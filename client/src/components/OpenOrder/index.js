@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
+import { Link, withRouter } from 'react-router-dom';
 import itemsData from '../../assets/data/items.json';
-import { browserHistory } from 'react-router';
 import userData from '../../assets/data/users.json';
 import './styles.sass';
 
@@ -47,7 +46,7 @@ class OpenOrder extends Component {
     return fetch(this.state.server + "orders/" +  this.props.orderId,{
       method: "DELETE"
     }).then(function(response){
-      browserHistory.push('/');
+      this.props.history.push('/');
     });
   }
 
@@ -67,4 +66,4 @@ class OpenOrder extends Component {
   }
 }
 
-export default OpenOrder;
+export default withRouter(OpenOrder);

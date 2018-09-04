@@ -38,9 +38,9 @@ module.exports = {
             } else {
                 newPost.save(function(err) {
                     if (err) {
-                        return res.status(400).send(err);
+                        return res.status(500).send(err);
                     } else {
-                        return res.send(newPost);
+                        return res.status(201).send(newPost);
                     }
                 });
             }
