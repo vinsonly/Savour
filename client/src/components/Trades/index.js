@@ -20,13 +20,14 @@ const mapStateToProps = (state) => {
 class Trades extends Component {
   constructor(props) {
     super(props);
-    let  JSON_SERVER = 'https://macho-json-server.herokuapp.com/';
     this.state = {
       modalOpened: false,
-      orders:[],
-      postings:[],
-      server: JSON_SERVER
     };
+    this.fetchData.bind(this);
+  }
+
+  fetchData() {
+
   }
 
   componentDidMount() {
@@ -40,27 +41,16 @@ class Trades extends Component {
     this.getJsonPostingData();
   }
 
+  openModal() {
+    const scrollBar = document.querySelector('.scrollbar-measure');
+    document.body.classList.add('modal-opened');
+    this.setState({ modalOpened: true });
+  }
+
   closeModal() {
     this.setState({ modalOpened: false });
     document.body.classList.remove('modal-opened');
     document.body.style.marginRight = 0;
-  }
-
-  getAllReceivedOrder() {
-    var self = this;
-    const list = this.state.orders.map(function (order, i){
-      if(order.sellerId == sessionStorage.getItem("userId")) {
-        return (<ReceivedOrder orderId={order.id} buyerId={order.buyerId} itemId={order.itemId} />);
-      }
-    });
-    console.log("list" + list);
-    return (
-      <div className="tradeProposedWrapper">
-      <h3 className="unCap">Your Received Orders</h3>
-      <div className="allProposedTradesWrapper">
-        {list}
-      </div>
-      </div>);
   }
 
   getJsonOrderData() {
@@ -73,22 +63,6 @@ class Trades extends Component {
       .then(data => this.setState({postings: data}));
   }
 
-  getAllOpenOrder() {
-    var self = this;
-    const list = this.state.orders.map(function (order, i){
-      if(order.buyerId == sessionStorage.getItem("userId")) {
-        return (<OpenOrder orderId={order.id} sellerId={order.sellerId} itemId={order.itemId}/>);
-      }
-    });
-    return (<div className="tradeReqWrapper">
-    <h3 className="unCap">Open Orders</h3>
-    <div className="allTradeRequestsWrapper">
-      {list}
-    </div>
-  </div>);
-
-  }
-
   getModal() {
     if (this.state.modalOpened) {
       return <AddItemPage key="modal" openClass="open" close={this.closeModal.bind(this)} />;
@@ -97,26 +71,20 @@ class Trades extends Component {
     }
   }
 
-  openModal() {
-    const scrollBar = document.querySelector('.scrollbar-measure');
-    document.body.classList.add('modal-opened');
-    this.setState({ modalOpened: true });
-  }
-
   getOrders() {
     let user = this.props.user;
     console.log("user", user);
-    if (true) {
-      return ([this.loadOpenPosting(), this.getAllReceivedOrder()]);
-    } else {
-      return (this.getAllOpenOrder());
+    if(!user) {
+      console.log("unable to get postings, user is not logged in");
+      return;
     }
+    return ([this.getOpenPosting(), this.getReceivedOrders(), this.getOpenOrders()]);
   }
 
-  loadOpenPosting() {
+  getOpenPosting() {
     const list = this.state.postings.map(function (posting, i){
-      if(posting.userId == sessionStorage.getItem("userId")) {
-        return <OpenPosting postingId={posting.id} />;
+      if(posting.userId == this.props.user._id) {
+        return <OpenPosting postingId={posting._id} />;
       }
     });
     console.log("list" + list);
@@ -130,7 +98,46 @@ class Trades extends Component {
     );
   }
 
+  getOpenOrders() {
+    const list = this.state.orders.map(function (order, i){
+      if(order.buyerId == this.props.user._id) {
+        return (<OpenOrder orderId={order._id} sellerId={order.sellerId} postingId={order.postingId}/>);
+      }
+    });
+    return (
+      <div className="tradeReqWrapper">
+        <h3 className="unCap">Open Orders</h3>
+        <div className="allTradeRequestsWrapper">
+          {list}
+        </div>
+      </div>
+    );
+  }
+
+  getReceivedOrders() {
+    const list = this.state.orders.map(function (order, i){
+      if(order.sellerId == this.props.user._id) {
+        return (<ReceivedOrder orderId={order.id} buyerId={order.buyerId} itemId={order.postingId} />);
+      }
+    });
+    console.log("list" + list);
+    return (
+      <div className="tradeProposedWrapper">
+        <h3 className="unCap">Your Received Orders</h3>
+        <div className="allProposedTradesWrapper">
+          {list}
+        </div>
+      </div>
+    );
+  }
+
+
   render() {
+
+    if(!this.state.orders || !this.state.postings) {
+      return <div>Loading...</div>
+    }
+
     return (
       <div className="tradesWrapper">
         {this.getModal()}

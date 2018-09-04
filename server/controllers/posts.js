@@ -1,5 +1,6 @@
 const Post = require('../models').post
 const User = require('../models').user
+const Order = require('../models').order
 
 
 module.exports = {
@@ -36,9 +37,6 @@ module.exports = {
                     message: `Cannot find user with id: ${id}`
                 }); 
             } else {
-
-                console.log("raw response from mongodb", raw);
-
                 newPost.save(function(err) {
                     if (err) {
                         return res.status(500).send(err);

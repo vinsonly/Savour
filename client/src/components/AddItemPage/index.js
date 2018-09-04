@@ -157,14 +157,6 @@ class AddItemPage extends Component {
       }
     })
 
-    // this.createPosting().then(function() {
-    //   this.modalWrapper.classList.remove(this.props.openClass);
-    //   setTimeout(() => {
-    //     this.props.close();
-    //   }, 1000).then(function(){
-    //     browserHistory.push('trades');
-    //   });
-    // });
   }
 
   validatePost() {
@@ -324,6 +316,13 @@ class Accept extends React.Component {
   render() {
 
       window.state = this.state;
+      
+      const dropZoneStyles = {
+        width: 'calc(100% - 20px)',
+        height: '100px',
+        border: 'dashed 2px lightgrey',
+        padding: '10px'
+      }
 
       return (
       <section>
@@ -331,6 +330,7 @@ class Accept extends React.Component {
           <Dropzone
               accept="image/jpeg, image/png"
               onDrop={this.onDrop}
+              style={dropZoneStyles}
           >
               <p id="dropDescription">Drop jpg or png images here</p>
           </Dropzone>
