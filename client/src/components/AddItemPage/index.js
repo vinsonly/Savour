@@ -15,6 +15,7 @@ class AddItemPage extends Component {
       modalIsOpen: false
     }
     this.updateValue = this.updateValue.bind(this);
+    this.updateLocation = this.updateLocation.bind(this);
   }
 
   createPosting() {
@@ -36,6 +37,17 @@ class AddItemPage extends Component {
 
   updateValue(event) {
     this.setState({[event.target.name]: event.target.value});
+  }
+
+  updateLocation(place) {
+    this.setState({
+      location: {
+        name: place.name,
+        address: place.formatted_address,
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng()
+      }
+    })
   }
 
   componentDidMount() {
@@ -109,7 +121,11 @@ class AddItemPage extends Component {
               </div> */}
               <div className="inputWrapper">
                 <label>Location:</label>
-                <SearchMap modalIsOpen={this.state.modalIsOpen}/>
+                <SearchMap
+                  modalIsOpen={this.state.modalIsOpen}
+                  updateLocation={this.updateLocation}
+                  location={this.state.location}
+                />
               </div>
             </div>
           </div>

@@ -50,10 +50,15 @@ class SearchMap extends Component {
     this.onPlacesChanged = this.onPlacesChanged.bind(this);
   }
 
+  handleClick() {
+    console.log("marker clicked");
+  }
+
   onPlacesChanged(places) {
     console.log("places changed");
     console.log(places);
     console.log(this.map);
+    let _this = this;
 
     if (places.length == 0) {
       return;
@@ -62,7 +67,11 @@ class SearchMap extends Component {
     let map = this.map.current.map_;
 
     // Clear out the old markers.
-    let markers = [];
+    let markers = this.state.markers;
+    markers.forEach(function(marker) {
+      marker.setMap(null);
+    });
+    markers = [];
 
     // For each place, get the icon, name and location.
     var bounds = new google.maps.LatLngBounds();
@@ -79,13 +88,32 @@ class SearchMap extends Component {
         scaledSize: new google.maps.Size(25, 25)
       };
 
+      console.log("place", place);
+
       // Create a marker for each place.
-      markers.push(new google.maps.Marker({
+      let marker = new google.maps.Marker({
         map: map,
         icon: icon,
         title: place.name,
-        position: place.geometry.location
-      }));
+        position: place.geometry.location,
+      })
+
+      // add popup of location information when clicked
+      var infowindow = new google.maps.InfoWindow();
+      google.maps.event.addListener(marker, 'click', function() {
+        infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
+          place.formatted_address + '</div>'
+        );
+
+        infowindow.open(map, this);
+        // set location
+        _this.props.updateLocation(place);
+      });
+
+      console.log("marker", marker);
+      window.marker = marker;
+
+      markers.push(marker);
 
       if (place.geometry.viewport) {
         // Only geocodes have viewport.
@@ -94,6 +122,7 @@ class SearchMap extends Component {
         bounds.extend(place.geometry.location);
       }
     });
+
     map.fitBounds(bounds);
     this.setState({
       markers: markers
@@ -124,7 +153,8 @@ class SearchMap extends Component {
 
   componentDidUpdate(prevProps,prevState) {
     if(this.props.modalIsOpen && !prevProps.modalIsOpen) {
-      this.afterModalOpen();    }
+      this.afterModalOpen();    
+    }
   }
 
   afterModalOpen() {
@@ -137,7 +167,6 @@ class SearchMap extends Component {
   }
  
   render() {
-    var myLatLng = {lat: 49.286610, lng: -123.136516};
 
     let searchMapStyles = {
       height: '320px',
@@ -153,6 +182,7 @@ class SearchMap extends Component {
           placeholder={"Search for your meeting location"}
           onPlacesChanged={this.onPlacesChanged}
           bounds={this.state.searchBoxBounds}
+          location={this.props.location}
         />
         <GoogleMap
           bootstrapURLKeys={{ key: "AIzaSyDvtndexGCQLEeLUsklFakSejGOElaVlH8" }}
@@ -161,11 +191,14 @@ class SearchMap extends Component {
           onChange={this.handleChange}
           ref={this.map}
         >
+
+        {(this.props.location && this.props.location.lat && this.props.location.lng) ? (
           <GmapsMarker
-            lat={49.286610}
-            lng={-123.136516}
-            text={"O"}
-          />
+          lat={this.props.location.lat}
+          lng={this.props.location.lng}
+        />
+        ) : (<div/>)}
+          
         </GoogleMap>
 
       </div>
@@ -193,10 +226,22 @@ class SearchBox extends React.Component {
     }
 
     this.onPlacesChanged.bind(this);
+    this.handleChange.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({
+      [event.target.id]: event.target.value
+    });
   }
 
   render() {
-    return <input id="searchInput" ref="input" {...this.props} type="text" disabled={this.state.bounds && this.state.searchBox} style={SearchBox.searchInputStyles}/>;
+    return <input id="searchInput" ref="input" {...this.props} type="text" 
+      disabled={this.state.bounds && this.state.searchBox}
+      style={SearchBox.searchInputStyles}
+      value={this.state.searchInput}
+      onChange={this.handleChange}  
+    />;
   }
   
   onPlacesChanged = () => {
@@ -226,10 +271,14 @@ class SearchBox extends React.Component {
       this.setState({
         searchBox: searchBox
       })
-      window.searchBox = searchBox
+    }
+
+    if(this.props.location && this.props.location.name && this.props.location.address && (JSON.stringify(this.props.location) != JSON.stringify(prevProps.location))) {
+      this.setState({
+        searchInput: `${this.props.location.name}, ${this.props.location.address}`
+      })    
     }
     
-    window.bounds = this.props.bounds; 
   }
 
   componentWillUnmount() {
