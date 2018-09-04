@@ -30,12 +30,15 @@ module.exports = {
 
         console.log(newPost);
 
-        User.findById(userId, function(err, user){
+        User.updateOne({ _id: userId }, { $addToSet: { posts: newPost._id } }, function(err, raw){
             if (err) {
                 return res.status(404).send({
                     message: `Cannot find user with id: ${id}`
                 }); 
             } else {
+
+                console.log("raw response from mongodb", raw);
+
                 newPost.save(function(err) {
                     if (err) {
                         return res.status(500).send(err);
@@ -43,8 +46,9 @@ module.exports = {
                         return res.status(201).send(newPost);
                     }
                 });
-            }
+            } 
         });
+
     },
 
     read(req, res) {

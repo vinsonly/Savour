@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
   return {
-      user: state.user
+    user: state.user
   }
 }
 
@@ -56,7 +56,7 @@ class Trades extends Component {
     console.log("list" + list);
     return (
       <div className="tradeProposedWrapper">
-      <h3 className="unCap">Received Orders</h3>
+      <h3 className="unCap">Your Received Orders</h3>
       <div className="allProposedTradesWrapper">
         {list}
       </div>
@@ -99,30 +99,14 @@ class Trades extends Component {
 
   openModal() {
     const scrollBar = document.querySelector('.scrollbar-measure');
-    // const scrollBarWidth = scrollBar.offsetWidth - scrollBar.clientWidth;
     document.body.classList.add('modal-opened');
-    document.body.style.marginRight = `100px`;
     this.setState({ modalOpened: true });
   }
 
-  getUserInfo(type) {
-    const userId = sessionStorage.getItem("userId");
-    if(userId) {
-      console.log(userData.users);
-      for (var i in userData.users) {
-        if (userData.users[i].id == userId) {
-          console.log(userData.users[i][type]);
-          return userData.users[i][type];
-        }
-      }
-    }
-    return null;
-  }
-
   getOrders() {
-    const type = this.getUserInfo("type");
-    console.log("user type :" + type);
-    if (type == "seller") {
+    let user = this.props.user;
+    console.log("user", user);
+    if (true) {
       return ([this.loadOpenPosting(), this.getAllReceivedOrder()]);
     } else {
       return (this.getAllOpenOrder());
@@ -130,7 +114,6 @@ class Trades extends Component {
   }
 
   loadOpenPosting() {
-    var self = this;
     const list = this.state.postings.map(function (posting, i){
       if(posting.userId == sessionStorage.getItem("userId")) {
         return <OpenPosting postingId={posting.id} />;
@@ -139,7 +122,7 @@ class Trades extends Component {
     console.log("list" + list);
     return (
       <div className="tradeReqWrapper">
-        <h3 className="unCap">Open Postings</h3>
+        <h3 className="unCap">Your Open Postings</h3>
         <div className="allTradeRequestsWrapper">
           {list}
         </div>

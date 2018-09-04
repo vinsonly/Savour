@@ -17,6 +17,9 @@ var userSchema = new Schema({
     lat: String
   },
   ether_address: String,
+  posts: {
+    type: [Schema.Types.ObjectId]
+  }, // array of links to the img
   created_at: Date,
   updated_at: Date
 });

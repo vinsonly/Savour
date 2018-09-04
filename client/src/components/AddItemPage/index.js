@@ -16,7 +16,6 @@ const mapStateToProps = (state) => {
 class AddItemPage extends Component {
   constructor(props) {
     super(props);
-    let  JSON_SERVER = 'https://macho-json-server.herokuapp.com/';
     this.state = {
       name: "",
       description: "",
@@ -24,7 +23,6 @@ class AddItemPage extends Component {
       images: [],
       errMsgs: [],
       status: "",
-      server: JSON_SERVER,
       modalIsOpen: false
     }
     this.updateValue = this.updateValue.bind(this);
