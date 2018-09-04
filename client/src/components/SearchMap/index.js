@@ -41,7 +41,8 @@ class SearchMap extends Component {
     super(props);
 
     this.state = {
-      searchBoxBounds: null
+      searchBoxBounds: null,
+      markers: []
     }
 
     this.map = React.createRef();
@@ -49,26 +50,70 @@ class SearchMap extends Component {
     this.onPlacesChanged = this.onPlacesChanged.bind(this);
   }
 
-  onPlacesChanged(getPlaces) {
+  onPlacesChanged(places) {
     console.log("places changed");
-    console.log(getPlaces);
+    console.log(places);
     console.log(this.map);
+
+    if (places.length == 0) {
+      return;
+    }
+
+    let map = this.map.current.map_;
+
+    // Clear out the old markers.
+    let markers = [];
+
+    // For each place, get the icon, name and location.
+    var bounds = new google.maps.LatLngBounds();
+    places.forEach(function(place) {
+      if (!place.geometry) {
+        console.log("Returned place contains no geometry");
+        return;
+      }
+      var icon = {
+        url: place.icon,
+        size: new google.maps.Size(71, 71),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34),
+        scaledSize: new google.maps.Size(25, 25)
+      };
+
+      // Create a marker for each place.
+      markers.push(new google.maps.Marker({
+        map: map,
+        icon: icon,
+        title: place.name,
+        position: place.geometry.location
+      }));
+
+      if (place.geometry.viewport) {
+        // Only geocodes have viewport.
+        bounds.union(place.geometry.viewport);
+      } else {
+        bounds.extend(place.geometry.location);
+      }
+    });
+    map.fitBounds(bounds);
+    this.setState({
+      markers: markers
+    });
+  
   }
 
   handleChange() {
     try {
       console.log("bounds changed");
+      console.log("this.map", this.map);
       let map = this.map.current.map_;
       console.log("map", map);   
       console.log("bounds", map.getBounds());
       this.setState({
         searchBoxBounds: map.getBounds()
       })
-
     } catch (err) {
       console.error(err);
     }
-    
   }
  
   render() {
@@ -92,8 +137,6 @@ class SearchMap extends Component {
           />
         </GoogleMap>
 
-         {/* <SearchBox 
-        /> */}
         <SearchBox2 
           placeholder={"Search Box"}
           onPlacesChanged={this.onPlacesChanged}
@@ -104,129 +147,58 @@ class SearchMap extends Component {
   }
 }
 
-class SearchBox extends React.Component {
-  constructor(props) {
-    super(props);
-    this.input = React.createRef();
-    this.state = {
-      setMap: false
-    }
-    this.setUpMap = this.setUpMap.bind(this);
-  }
-
-  render() {
-    return (
-      <div style={{ height: '100%', width: '100%' }}>
-        <input id="pac-input" className="controls" type="text" placeholder="Search Box" />
-        <div id="map" style={{ height: '100%', width: '100%' }}/>
-      </div>
-    );
-  }
-
-  setUpMap() {
-    let _this = this
-
-    this.map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: -33.8688, lng: 151.2195},
-      zoom: 13,
-      mapTypeId: 'roadmap'
-    });
-  
-    // Create the search box and link it to the UI element.
-    var input = document.getElementById('pac-input');
-    this.searchBox = new google.maps.places.SearchBox(input);
-    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-  
-    // Bias the SearchBox results towards current map's viewport.
-    this.map.addListener('bounds_changed', function() {
-      _this.searchBox.setBounds(_this.map.getBounds());
-    });
-  
-    var markers = [];
-    // Listen for the event fired when the user selects a prediction and retrieve
-    // more details for that place.
-    this.searchBox.addListener('places_changed', function() {
-      var places = _this.searchBox.getPlaces();
-  
-      if (places.length == 0) {
-        return;
-      }
-  
-      // Clear out the old markers.
-      markers.forEach(function(marker) {
-        marker.setMap(null);
-      });
-
-      markers = [];
-  
-      // For each place, get the icon, name and location.
-      var bounds = new google.maps.LatLngBounds();
-      places.forEach(function(place) {
-        if (!place.geometry) {
-          console.log("Returned place contains no geometry");
-          return;
-        }
-        var icon = {
-          url: place.icon,
-          size: new google.maps.Size(71, 71),
-          origin: new google.maps.Point(0, 0),
-          anchor: new google.maps.Point(17, 34),
-          scaledSize: new google.maps.Size(25, 25)
-        };
-  
-        // Create a marker for each place.
-        markers.push(new google.maps.Marker({
-          map: _this.map,
-          icon: icon,
-          title: place.name,
-          position: place.geometry.location
-        }));
-  
-        if (place.geometry.viewport) {
-          // Only geocodes have viewport.
-          bounds.union(place.geometry.viewport);
-        } else {
-          bounds.extend(place.geometry.location);
-        }
-      });
-      _this.map.fitBounds(bounds);
-    });
-    
-  }
-
-  componentDidMount() {
-    let _this = this;
-    setTimeout(function() {
-      _this.setUpMap();
-    }, 0);  
-    
-  }
-
-  componentWillUnmount() {
-    // https://developers.google.com/maps/documentation/javascript/events#removing
-    google.maps.event.clearInstanceListeners(this.searchBox);
-    google.maps.event.clearInstanceListeners(this.map);
-  }
-}
-
 class SearchBox2 extends React.Component {
   static propTypes = {
     placeholder: PropTypes.string,
     onPlacesChanged: PropTypes.func
   }
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      searchBox: null
+    }
+
+    this.onPlacesChanged.bind(this);
+  }
+
   render() {
     return <input ref="input" {...this.props} type="text"/>;
   }
+  
   onPlacesChanged = () => {
     if (this.props.onPlacesChanged) {
-      this.props.onPlacesChanged(this.searchBox.getPlaces());
+      this.props.onPlacesChanged(this.state.searchBox.getPlaces());
     }
   }
+
   componentDidMount() {
     var input = ReactDOM.findDOMNode(this.refs.input);
-    this.searchBox = new google.maps.places.SearchBox(input);
-    this.searchBox.addListener('places_changed', this.onPlacesChanged);
+    let searchBox = new google.maps.places.SearchBox(input);
+    searchBox.addListener('places_changed', this.onPlacesChanged);
+    if(this.props.bounds) {
+      searchBox.setBounds(this.props.bounds);
+    }
+    window.searchBox = searchBox;
+    this.setState({
+      searchBox: searchBox
+    })
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    if(this.props.bounds && (JSON.stringify(prevProps.bounds) != JSON.stringify(this.props.bounds))) {
+      let searchBox = this.state.searchBox;
+      searchBox.setBounds(this.props.bounds);
+      this.setState({
+        searchBox: searchBox
+      })
+      window.searchBox = searchBox
+    }
+    
+    window.bounds = this.props.bounds; 
+  }
+
   componentWillUnmount() {
     // https://developers.google.com/maps/documentation/javascript/events#removing
     google.maps.event.clearInstanceListeners(this.searchBox);
