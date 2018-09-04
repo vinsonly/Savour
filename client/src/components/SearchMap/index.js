@@ -1,22 +1,27 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import GoogleMapReact from 'google-map-react';
+import GoogleMap from 'google-map-react';
 import './styles.css';
 
 const google = window.google;
 
 const GmapsMarker = ({ text }) => {
 
-    let gMapsStyles = {
+    let markerIconStyles = {
         color: "red",
         height: "20px",
         width: "20px"
     }
 
+    let markerStyles = {
+      position: 'absolute',
+      transform: 'translate(-50%, -100%)'
+    }
+
     return(
-      <div>
-        <i style={gMapsStyles} className="material-icons">
+      <div style={markerStyles}>
+        <i style={markerIconStyles} className="material-icons">
           location_on
         </i>
       </div>
@@ -35,7 +40,12 @@ class SearchMap extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      searchBoxBounds: null
+    }
+
     this.map = React.createRef();
+    this.handleChange = this.handleChange.bind(this);
     this.onPlacesChanged = this.onPlacesChanged.bind(this);
   }
 
@@ -43,6 +53,22 @@ class SearchMap extends Component {
     console.log("places changed");
     console.log(getPlaces);
     console.log(this.map);
+  }
+
+  handleChange() {
+    try {
+      console.log("bounds changed");
+      let map = this.map.current.map_;
+      console.log("map", map);   
+      console.log("bounds", map.getBounds());
+      this.setState({
+        searchBoxBounds: map.getBounds()
+      })
+
+    } catch (err) {
+      console.error(err);
+    }
+    
   }
  
   render() {
@@ -52,10 +78,11 @@ class SearchMap extends Component {
       // Important! Always set the container height explicitly
       <div style={{ height: '50%', width: '100%' }}>
 
-        {/* <GoogleMapReact
+        <GoogleMap
           bootstrapURLKeys={{ key: "AIzaSyDvtndexGCQLEeLUsklFakSejGOElaVlH8" }}
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
+          onChange={this.handleChange}
           ref={this.map}
         >
           <GmapsMarker
@@ -63,8 +90,14 @@ class SearchMap extends Component {
             lng={-123.136516}
             text={"O"}
           />
-        </GoogleMapReact> */}
-         <SearchBox 
+        </GoogleMap>
+
+         {/* <SearchBox 
+        /> */}
+        <SearchBox2 
+          placeholder={"Search Box"}
+          onPlacesChanged={this.onPlacesChanged}
+          bounds={this.state.searchBoxBounds}
         />
       </div>
     );
@@ -72,10 +105,6 @@ class SearchMap extends Component {
 }
 
 class SearchBox extends React.Component {
-  static propTypes = {
-    placeholder: PropTypes.string,
-    onPlacesChanged: PropTypes.func
-  }
   constructor(props) {
     super(props);
     this.input = React.createRef();
@@ -92,12 +121,6 @@ class SearchBox extends React.Component {
         <div id="map" style={{ height: '100%', width: '100%' }}/>
       </div>
     );
-  }
-  onPlacesChanged = () => {
-    console.log("places changed, searchbox")
-    if (this.props.onPlacesChanged) {
-      this.props.onPlacesChanged(this.searchBox.getPlaces());
-    }
   }
 
   setUpMap() {
@@ -183,6 +206,30 @@ class SearchBox extends React.Component {
     // https://developers.google.com/maps/documentation/javascript/events#removing
     google.maps.event.clearInstanceListeners(this.searchBox);
     google.maps.event.clearInstanceListeners(this.map);
+  }
+}
+
+class SearchBox2 extends React.Component {
+  static propTypes = {
+    placeholder: PropTypes.string,
+    onPlacesChanged: PropTypes.func
+  }
+  render() {
+    return <input ref="input" {...this.props} type="text"/>;
+  }
+  onPlacesChanged = () => {
+    if (this.props.onPlacesChanged) {
+      this.props.onPlacesChanged(this.searchBox.getPlaces());
+    }
+  }
+  componentDidMount() {
+    var input = ReactDOM.findDOMNode(this.refs.input);
+    this.searchBox = new google.maps.places.SearchBox(input);
+    this.searchBox.addListener('places_changed', this.onPlacesChanged);
+  }
+  componentWillUnmount() {
+    // https://developers.google.com/maps/documentation/javascript/events#removing
+    google.maps.event.clearInstanceListeners(this.searchBox);
   }
 }
  
