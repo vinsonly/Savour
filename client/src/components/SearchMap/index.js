@@ -115,14 +115,45 @@ class SearchMap extends Component {
       console.error(err);
     }
   }
+
+  componentDidMount() {
+    if(this.props.modalIsOpen) {
+      this.afterModalOpen();
+    }
+  }
+
+  componentDidUpdate(prevProps,prevState) {
+    if(this.props.modalIsOpen && !prevProps.modalIsOpen) {
+      this.afterModalOpen();    }
+  }
+
+  afterModalOpen() {
+    this.handleChange();
+    let map = this.map.current.map_;
+    let input = document.getElementById('searchInput');
+    console.log("input", input);
+    console.log("map", map);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+  }
  
   render() {
     var myLatLng = {lat: 49.286610, lng: -123.136516};
 
+    let searchMapStyles = {
+      height: '320px',
+      width: '100%',
+      marginTop: '1rem'
+    }
+
     return (
       // Important! Always set the container height explicitly
-      <div style={{ height: '50%', width: '100%' }}>
+      <div style={searchMapStyles}>
 
+        <SearchBox 
+          placeholder={"Search for your meeting location"}
+          onPlacesChanged={this.onPlacesChanged}
+          bounds={this.state.searchBoxBounds}
+        />
         <GoogleMap
           bootstrapURLKeys={{ key: "AIzaSyDvtndexGCQLEeLUsklFakSejGOElaVlH8" }}
           defaultCenter={this.props.center}
@@ -137,34 +168,35 @@ class SearchMap extends Component {
           />
         </GoogleMap>
 
-        <SearchBox2 
-          placeholder={"Search Box"}
-          onPlacesChanged={this.onPlacesChanged}
-          bounds={this.state.searchBoxBounds}
-        />
       </div>
     );
   }
 }
 
-class SearchBox2 extends React.Component {
+class SearchBox extends React.Component {
   static propTypes = {
     placeholder: PropTypes.string,
     onPlacesChanged: PropTypes.func
+  }
+
+  static searchInputStyles = {
+    margin: 0,
+    width: 'calc(100% - 50px)'
   }
 
   constructor(props) {
     super(props);
 
     this.state = {
-      searchBox: null
+      searchBox: null,
+      bounds: props.bounds
     }
 
     this.onPlacesChanged.bind(this);
   }
 
   render() {
-    return <input ref="input" {...this.props} type="text"/>;
+    return <input id="searchInput" ref="input" {...this.props} type="text" disabled={this.state.bounds && this.state.searchBox} style={SearchBox.searchInputStyles}/>;
   }
   
   onPlacesChanged = () => {
@@ -177,6 +209,7 @@ class SearchBox2 extends React.Component {
     var input = ReactDOM.findDOMNode(this.refs.input);
     let searchBox = new google.maps.places.SearchBox(input);
     searchBox.addListener('places_changed', this.onPlacesChanged);
+
     if(this.props.bounds) {
       searchBox.setBounds(this.props.bounds);
     }
@@ -201,7 +234,7 @@ class SearchBox2 extends React.Component {
 
   componentWillUnmount() {
     // https://developers.google.com/maps/documentation/javascript/events#removing
-    google.maps.event.clearInstanceListeners(this.searchBox);
+    google.maps.event.clearInstanceListeners(this.state.searchBox);
   }
 }
  

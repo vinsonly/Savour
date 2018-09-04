@@ -11,7 +11,8 @@ class AddItemPage extends Component {
       name: "",
       description: "",
       price: 0,
-      server: JSON_SERVER
+      server: JSON_SERVER,
+      modalIsOpen: false
     }
     this.updateValue = this.updateValue.bind(this);
   }
@@ -40,6 +41,9 @@ class AddItemPage extends Component {
   componentDidMount() {
     setTimeout(() => {
       this.modalWrapper.classList.add(this.props.openClass);
+      this.setState({
+        modalIsOpen: true
+      })
     }, 50);
   }
 
@@ -47,8 +51,12 @@ class AddItemPage extends Component {
     this.modalWrapper.classList.remove(this.props.openClass);
     setTimeout(() => {
       this.props.close();
+      this.setState({
+        modalIsOpen: false
+      })
     }, 850);
   }
+
   save(){
 
     console.log("state", this.state);
@@ -93,13 +101,16 @@ class AddItemPage extends Component {
               </div>
               <div className="inputWrapper">
                 <label htmlFor="itemDescription">Description:</label>
-                <textarea name="description" id="itemDescription" placeholder="Enter Item Description" onChange={this.updateValue} value={this.state.description} />
+                <textarea name="description" id="itemDescription" placeholder="Enter Item Description" onChange={this.updateValue} value={this.state.description} style={{resize:'vertical'}}/>
               </div>
               {/* <div className="inputWrapper">
                 <label htmlFor="itemTags">Tags(Comma Separated):</label>
                 <textarea name="itemTags" id="itemTags" className="itemTags" placeholder="Enter Tags" />
               </div> */}
-              <SearchMap />
+              <div className="inputWrapper">
+                <label>Location:</label>
+                <SearchMap modalIsOpen={this.state.modalIsOpen}/>
+              </div>
             </div>
           </div>
           <div className="buttonWrapper">
