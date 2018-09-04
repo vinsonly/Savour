@@ -124,6 +124,11 @@ class SearchMap extends Component {
     });
 
     map.fitBounds(bounds);
+
+    if(places.length == 1) {
+      _this.props.updateLocation(places[0]);
+    }
+
     this.setState({
       markers: markers
     });
@@ -182,7 +187,6 @@ class SearchMap extends Component {
           placeholder={"Search for your meeting location"}
           onPlacesChanged={this.onPlacesChanged}
           bounds={this.state.searchBoxBounds}
-          location={this.props.location}
         />
         <GoogleMap
           bootstrapURLKeys={{ key: "AIzaSyDvtndexGCQLEeLUsklFakSejGOElaVlH8" }}
@@ -226,21 +230,12 @@ class SearchBox extends React.Component {
     }
 
     this.onPlacesChanged.bind(this);
-    this.handleChange.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({
-      [event.target.id]: event.target.value
-    });
   }
 
   render() {
     return <input id="searchInput" ref="input" {...this.props} type="text" 
       disabled={this.state.bounds && this.state.searchBox}
       style={SearchBox.searchInputStyles}
-      value={this.state.searchInput}
-      onChange={this.handleChange}  
     />;
   }
   
@@ -272,13 +267,6 @@ class SearchBox extends React.Component {
         searchBox: searchBox
       })
     }
-
-    if(this.props.location && this.props.location.name && this.props.location.address && (JSON.stringify(this.props.location) != JSON.stringify(prevProps.location))) {
-      this.setState({
-        searchInput: `${this.props.location.name}, ${this.props.location.address}`
-      })    
-    }
-    
   }
 
   componentWillUnmount() {
