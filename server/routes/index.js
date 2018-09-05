@@ -21,7 +21,7 @@ module.exports = (app) => {
     app.post('/api/post/update', postsController.update);
     app.post('/api/post/delete', postsController.delete);
     app.get('/api/post/:id', postsController.findById);
-    app.get('/api/post/seller/:id', postsController.getSellerPosts);
+    app.get('/api/posts/seller/:sellerId', postsController.getSellerPosts);
 
     //orders
     app.post('/api/order', ordersController.create);
@@ -29,8 +29,8 @@ module.exports = (app) => {
     app.post('/api/order/update', ordersController.update);
     app.post('/api/order/delete', ordersController.delete);
     app.get('/api/order/:id', ordersController.findById);
-    app.get('/api/orders/buyer/:id', ordersController.getBuyerOrders);
-    app.get('/api/orders/seller/:id', ordersController.getSellerOrders);
+    app.get('/api/orders/buyer/:buyerId', ordersController.getBuyerOrders);
+    app.get('/api/orders/seller/:sellerId', ordersController.getSellerOrders);
 
     app.post('/api/login', authController.login);
 

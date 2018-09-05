@@ -44,9 +44,8 @@ module.exports = {
                         return res.status(201).send(newPost);
                     }
                 });
-            } 
+            }
         });
-
     },
 
     read(req, res) {
@@ -109,7 +108,7 @@ module.exports = {
                     if (err) {
                         return res.status(500).send(err);
                     } else {            
-                        return res.send("Post successfully deleted.")
+                        return res.send(post);
                     }
                 }); 
             }  

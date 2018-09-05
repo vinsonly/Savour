@@ -1,5 +1,6 @@
 const Post = require('../models').post
 const User = require('../models').user
+const Order = require('../models').order
 
 module.exports = {
     create(req, res) {

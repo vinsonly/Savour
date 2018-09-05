@@ -23,11 +23,52 @@ class Trades extends Component {
     this.state = {
       modalOpened: false,
     };
-    this.fetchData.bind(this);
+    this.fetchData.bind(this)();
+    this.fetchPosts = this.fetchPosts.bind(this);
+    this.fetchBuyOrders = this.fetchBuyOrders.bind(this);
+    this.getOpenPosting = this.getOpenPosting.bind(this);
+    this.getOpenOrders = this.getOpenOrders.bind(this);
+    this.getReceivedOrders = this.getReceivedOrders.bind(this);
   }
 
   fetchData() {
+    this.fetchPosts();
+    this.fetchBuyOrders();
+  }
 
+  fetchPosts() {
+    // get seller posts
+    let status;
+    let _this = this;
+    fetch(`/api/posts/seller/${this.props.user._id}`).then(res => {
+      status = res.status;
+      return res.json();
+    }).then(body => {
+      console.log("status", status);
+      console.log("body", body);
+      _this.setState({
+        postings: body
+      })
+    }).catch(err => {
+      console.error(err);
+    })
+  }
+
+  fetchBuyOrders() {
+    let status;
+    let _this = this;
+    fetch(`/api/orders/buyer/${this.props.user._id}`).then(res => {
+      status = res.status;
+      return res.json();
+    }).then(body => {
+      console.log("status", status);
+      console.log("body", body);
+      _this.setState({
+        orders: body
+      })
+    }).catch(err => {
+      console.error(err);
+    })
   }
 
   componentDidMount() {
@@ -37,8 +78,7 @@ class Trades extends Component {
     }
     document.body.scrollTop = 0;
     document.querySelector('.menu').classList.remove('open');
-    this.getJsonOrderData();
-    this.getJsonPostingData();
+
   }
 
   openModal() {
@@ -51,16 +91,6 @@ class Trades extends Component {
     this.setState({ modalOpened: false });
     document.body.classList.remove('modal-opened');
     document.body.style.marginRight = 0;
-  }
-
-  getJsonOrderData() {
-    return fetch(this.state.server + "orders").then(response => response.json())
-      .then(data => this.setState({orders: data}));
-  }
-
-  getJsonPostingData() {
-    return fetch(this.state.server + "postings").then(response => response.json())
-      .then(data => this.setState({postings: data}));
   }
 
   getModal() {
@@ -82,9 +112,10 @@ class Trades extends Component {
   }
 
   getOpenPosting() {
+    let _this = this;
     const list = this.state.postings.map(function (posting, i){
-      if(posting.userId == this.props.user._id) {
-        return <OpenPosting postingId={posting._id} />;
+      if(posting.userId == _this.props.user._id) {
+        return <OpenPosting posting={posting} updatePosts={_this.fetchPosts} key={i} />;
       }
     });
     console.log("list" + list);
@@ -99,9 +130,10 @@ class Trades extends Component {
   }
 
   getOpenOrders() {
+    let _this = this;
     const list = this.state.orders.map(function (order, i){
-      if(order.buyerId == this.props.user._id) {
-        return (<OpenOrder orderId={order._id} sellerId={order.sellerId} postingId={order.postingId}/>);
+      if(order.buyerId == _this.props.user._id) {
+        return (<OpenOrder orderId={order._id} sellerId={order.sellerId} postingId={order.postingId} key={i}/>);
       }
     });
     return (
@@ -115,8 +147,9 @@ class Trades extends Component {
   }
 
   getReceivedOrders() {
+    let _this = this;
     const list = this.state.orders.map(function (order, i){
-      if(order.sellerId == this.props.user._id) {
+      if(order.sellerId == _this.props.user._id) {
         return (<ReceivedOrder orderId={order.id} buyerId={order.buyerId} itemId={order.postingId} />);
       }
     });
