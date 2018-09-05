@@ -15,29 +15,26 @@ const AnyReactComponent = ({ text }) => {
  
 class Map extends Component {
   static defaultProps = {
-    center: {
-      lat: 49.286610,
-      lng: -123.136516
-    },
     zoom: 15
   };
  
   render() {
-    var myLatLng = {lat: 49.286610, lng: -123.136516};
 
     return (
       // Important! Always set the container height explicitly
       <div style={{ height: '100vh', width: '100%' }}>
         <GoogleMapReact
           bootstrapURLKeys={{ key: "AIzaSyDvtndexGCQLEeLUsklFakSejGOElaVlH8" }}
-          defaultCenter={this.props.center}
+          defaultCenter={{
+            lat: parseFloat(this.props.lat),
+            lng: parseFloat(this.props.lng)
+                }}
           defaultZoom={this.props.zoom}
         >
           <AnyReactComponent
-            lat={49.286610}
-            lng={-123.136516}
-            text={"O"}
-          />
+            lat={parseFloat(this.props.lat)}
+            lng={parseFloat(this.props.lng)}
+            />
 
 
         </GoogleMapReact>

@@ -90,7 +90,7 @@ class SignUp extends Component {
     }
 
     render() {
-        if(this.props.user) {
+        if(!this.props.user) {
             this.props.history.push('/');
         }
 

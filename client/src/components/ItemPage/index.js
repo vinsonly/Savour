@@ -118,7 +118,7 @@ class ItemPage extends Component {
           </div>
         </div>
 
-        <Map/>
+        <Map lat={this.state.posting.location.lat} lng={this.state.posting.location.lng}/>
       </div>
     );
   }
