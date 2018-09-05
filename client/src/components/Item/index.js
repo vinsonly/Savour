@@ -22,9 +22,15 @@ class Item extends Component {
         }} >
           <img src={post.images[0]}></img>
         </div>
-        <p>{post.name} - ${post.price.$numberDecimal}</p>
+        <div className="itemInfoFlex" style={{justifyContent: 'space-between'}}>
+          <span>{post.name}</span>
+          <span>${post.price.$numberDecimal}</span>
+        </div>
         <div className="itemInfoFlex">
-          <div>{post.seller[0].username}</div>
+            <i className="material-icons">
+              person
+            </i>&nbsp;
+            {post.seller[0].username}
           {/* <div className="rating">{this.state.posting.rating}</div> */}
         </div>
       </div>

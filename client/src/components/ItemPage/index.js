@@ -45,6 +45,7 @@ class ItemPage extends Component {
   componentDidMount() {
     document.body.scrollTop = 0;
     document.querySelector('.menu').classList.remove('open');
+    window.scrollTo(0, 0);
   }
 
   orderNow() {

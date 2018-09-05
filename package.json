@@ -8,7 +8,8 @@
     "server": "nodemon /server/server.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\" \"sudo service mongod restart\"",
     "start": "node server/server.js",
-    "prod": "concurrently --kill-others-on-fail \"yarn start\" \"yarn client\""
+    "prod": "concurrently --kill-others-on-fail \"yarn start\" \"yarn client\"",
+    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "repository": {
     "type": "git",
@@ -25,7 +26,9 @@
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
     "concurrently": "^3.6.1",
+    "dotenv": "^6.0.0",
     "express": "^4.16.3",
+    "faker": "^4.1.0",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.2.7",
     "validator": "^10.7.0"

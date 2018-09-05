@@ -150,6 +150,10 @@ class Header extends Component {
           <Link to="/" className="logo">
             Savour
           </Link>
+          &nbsp;
+          <span className="slogan">
+            Save money, savour food.
+          </span>
         </h1>
         {this.state.menuActive ? this.menuButton: ""}
         {menu}

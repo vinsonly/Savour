@@ -1,3 +1,4 @@
+require('dotenv').config(); // load the environment variables
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -5,7 +6,14 @@ const appRoot = require('app-root-path');
 
 global.appRoot = appRoot;
 
-mongoose.connect('mongodb://localhost:27017/mydb', { useNewUrlParser: true });
+if( process.env.DB_USER == null
+  || process.env.DB_PASSWORD == null
+  || process.env.NODE_ENV == "development") {
+    mongoose.connect('mongodb://localhost:27017/mydb', { useNewUrlParser: true });
+  } else {
+    mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@ds145752.mlab.com:45752/savour-dev`, { useNewUrlParser: true });
+  }
+
 
 const app = express();
 app.use(bodyParser.json());
