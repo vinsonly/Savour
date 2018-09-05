@@ -28,7 +28,7 @@ class Map extends Component {
           defaultCenter={{
             lat: parseFloat(this.props.lat),
             lng: parseFloat(this.props.lng)
-                }}
+          }}
           defaultZoom={this.props.zoom}
         >
           <AnyReactComponent
