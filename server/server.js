@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const appRoot = require('app-root-path');
+const path = require('path');
 
 global.appRoot = appRoot;
 
