@@ -119,13 +119,21 @@ module.exports = {
           /\.json$/,
           /\.woff$/,
           /\.woff2$/,
-          /\.(ttf|svg|eot)$/
+          /\.(ttf|svg|eot)$/,
+          /\.sass$/,
+          /\.scss$/
         ],
         loader: 'url',
         query: {
           limit: 10000,
           name: 'static/media/[name].[hash:8].[ext]'
         }
+      },
+      // Process sass
+      {
+        test: /\.sass$/,
+        include: paths.appSrc,
+        loaders: ["style", "css", "sass"]
       },
       // Process JS with Babel.
       {
