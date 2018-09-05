@@ -19,6 +19,27 @@ class ItemPage extends Component {
     console.log(this.props)
     let postingId = parseInt(this.props.match.params.id);
     this.orderNow = this.orderNow.bind(this);
+    this.fetchPost = this.fetchPost.bind(this);
+    this.state = {}
+    if(!props.post) {
+      this.fetchPost();
+    }
+  }
+
+  fetchPost() {
+    let status;
+    let postingId = this.props.match.params.id
+    fetch(`/api/post/${postingId}`).then(res => {
+      status = res.status;
+      return res.json();
+    }).then(body => {
+      console.log("body", body);
+      this.setState({
+        posting: body[0]
+      })
+    }).catch(err => {
+      console.error(err);
+    })
   }
 
   componentDidMount() {
@@ -30,21 +51,19 @@ class ItemPage extends Component {
     console.log(this.state);
     let _this = this;
     
-    
     if(!this.props.user) {
       alert("Please login to place an order.");
       
-      this.props.history.push('login');
+      this.props.history.push('/login');
     
-    } else if(parseInt(sessionStorage.userId) == this.state.posting.userId) {
+    } else if(this.props.user._id == this.state.posting.userId) {
       alert("You may not place an order on your own posting")
-      
     } else {
       console.log("Fulfilling order");
       // call web3 here
-      this.createOrder().then(function () {
-        _this.props.history.push('trades');
-      });
+      // this.createOrder().then(function () {
+      //   _this.props.history.push('trades');
+      // });
     }
   }
 
@@ -65,15 +84,18 @@ class ItemPage extends Component {
   }
 
   render() {
-    window.state = this.state;
 
-    let picUrl = "/" + this.state.item.picture;
+    if(!this.state.posting) {
+      return (<div>Loading...</div>);
+    }
+
+    console.log("posting", this.state.posting);
 
     return (
       <div>
         <div className="itemPageWrapper">
           <div className="itemImgWrapper">
-            <img src={picUrl}></img>
+            <img src={this.state.posting.images[0]}></img>
           </div>
           <div className="itemInfoWrapper">
             <Link className="backLink" to="/">
@@ -84,13 +106,13 @@ class ItemPage extends Component {
                 </svg>
               </span>All Items
             </Link>
-            <h3 className="itemName">{this.state.item.name}</h3>
-            <p className="itemCost frm">${this.state.item.price}</p>
+            <h3 className="itemName">{this.state.posting.name}</h3>
+            <p className="itemCost frm">${this.state.posting.price.$numberDecimal}</p>
             <p className="description">
-              {this.state.item.desc}
+              {this.state.posting.description}
             </p>
-            <p className="seller frm">By <span>{this.state.user.name}</span></p>
-            <p className="seller frm"><span>Seller Rating: {this.state.user.rating}</span></p>
+            <p className="seller frm">Sold By <span>{this.state.posting.seller[0].name}</span></p>
+            {/* <p className="seller frm"><span>Seller Rating: {this.state.user.rating}</span></p> */}
             <button className="reqTradeBtn normalBtn" onClick={this.orderNow.bind(this)}>Order Now</button>
           </div>
         </div>
@@ -101,4 +123,4 @@ class ItemPage extends Component {
   }
 }
 
-export default connect(mapStateToProps)(ItemPage);
+export default withRouter(connect(mapStateToProps)(ItemPage));

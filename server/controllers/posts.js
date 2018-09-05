@@ -1,6 +1,7 @@
 const Post = require('../models').post
 const User = require('../models').user
 const Order = require('../models').order
+var mongoose = require('mongoose');
 
 
 module.exports = {
@@ -49,13 +50,6 @@ module.exports = {
     },
 
     read(req, res) {
-        // Post.find({}, function(err, posts){
-        //     if (err) {
-        //         return res.status(500).send(err);
-        //     } else {
-        //         return res.send(posts);
-        //     }        
-        // })
 
         Post.aggregate([
             { $match: {} },
@@ -149,15 +143,45 @@ module.exports = {
     findById(req, res) {
         let id = req.params.id;
 
-        Post.findById(id, function(err, post) {
+        // Post.findById(id, function(err, post) {
+        //     if (err) {
+        //         console.log(err);
+        //         return res.status(404).send({
+        //             message: `Cannot find post with id: ${id}`
+        //         });
+        //     } else {
+        //         return res.send(post);
+        //     }          
+        // })
+
+        Post.aggregate([
+            { $match: {_id: mongoose.Types.ObjectId(id)} },
+            { 
+                $lookup: {
+                    from: 'users',
+                    localField: 'userId',
+                    foreignField: '_id', 
+                    as: 'seller'
+                }
+            },
+            {
+                $project: {
+                    seller: {
+                        _id: 0,
+                        password: 0,
+                        admin: 0,
+                        updated_at: 0,
+                        created_at: 0,
+                        posts: 0
+                    }
+                }
+            }
+        ], function(err, posts) {
             if (err) {
-                console.log(err);
-                return res.status(404).send({
-                    message: `Cannot find post with id: ${id}`
-                });
+                return res.status(500).send(err);
             } else {
-                return res.send(post);
-            }          
+                return res.send(posts);
+            }           
         })
     },
 
