@@ -34,6 +34,7 @@ require('./routes')(app);
 
 // production
 if (process.env.NODE_ENV === 'production') {
+  console.log("running in production");
   // Serve any static files
   app.use(express.static(path.join(__dirname, 'client/build')));
   // Handle React routing, return all requests to React app
