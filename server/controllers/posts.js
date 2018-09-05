@@ -49,13 +49,44 @@ module.exports = {
     },
 
     read(req, res) {
-        Post.find({}, function(err, posts){
+        // Post.find({}, function(err, posts){
+        //     if (err) {
+        //         return res.status(500).send(err);
+        //     } else {
+        //         return res.send(posts);
+        //     }        
+        // })
+
+        Post.aggregate([
+            { $match: {} },
+            { 
+                $lookup: {
+                    from: 'users',
+                    localField: 'userId',
+                    foreignField: '_id', 
+                    as: 'seller'
+                }
+            },
+            {
+                $project: {
+                    seller: {
+                        _id: 0,
+                        password: 0,
+                        admin: 0,
+                        updated_at: 0,
+                        created_at: 0,
+                        posts: 0
+                    }
+                }
+            }
+        ], function(err, posts) {
             if (err) {
                 return res.status(500).send(err);
             } else {
                 return res.send(posts);
-            }        
+            }           
         })
+        
     },
 
     update(req, res) {

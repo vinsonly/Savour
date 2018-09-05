@@ -1,48 +1,24 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-
 import './styles.sass';
-
 import items from '../../assets/data/items.json';
-
 import postings from '../../assets/data/postings.json';
-
 import users from '../../assets/data/users.json';
-
 import Map from '../Map/index';
+import { connect } from 'react-redux';
 
-
+const mapStateToProps = (state) => {
+  return {
+      user: state.user
+  }
+}
 
 class ItemPage extends Component {
   constructor(props) {
     super(props)
-    
     console.log(this.props)
-
     let postingId = parseInt(this.props.match.params.id);
-
     this.orderNow = this.orderNow.bind(this);
-
-    let thisPosting = postings.postings.find(function(posting) {
-      return parseInt(posting.id) == parseInt(postingId);
-    })
-
-    let thisItem = items.items.find(function(item) {
-      return parseInt(item.id) == parseInt(thisPosting.itemId);
-    })
-
-    let thisUser = users.users.find(function(user){
-      return parseInt(user.id) == parseInt(thisPosting.userId);
-    })
-
-    let  JSON_SERVER = 'https://macho-json-server.herokuapp.com';
-
-    this.state = {
-      posting: thisPosting, 
-      item: thisItem,
-      user: thisUser,
-      server: JSON_SERVER
-    }
   }
 
   componentDidMount() {
@@ -54,7 +30,8 @@ class ItemPage extends Component {
     console.log(this.state);
     let _this = this;
     
-    if(sessionStorage.userId == null || parseInt(sessionStorage.userId) < 0) {
+    
+    if(!this.props.user) {
       alert("Please login to place an order.");
       
       this.props.history.push('login');
@@ -124,4 +101,4 @@ class ItemPage extends Component {
   }
 }
 
-export default ItemPage;
+export default connect(mapStateToProps)(ItemPage);

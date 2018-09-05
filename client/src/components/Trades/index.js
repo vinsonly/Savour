@@ -16,7 +16,6 @@ const mapStateToProps = (state) => {
   }
 }
 
-
 class Trades extends Component {
   constructor(props) {
     super(props);

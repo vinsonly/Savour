@@ -7,24 +7,28 @@ import postings from '../../assets/data/postings.json';
 class Homepage extends Component {
   constructor(props) {
     super(props);
-    let  JSON_SERVER = 'https://macho-json-server.herokuapp.com/';
     this.state = {
       postings:[],
-      server: JSON_SERVER
     };
   }
 
-  getJsonPostingData() {
-    return fetch(this.state.server + "postings").then(response => response.json())
-      .then(data => this.setState({postings: data}));
+  getPostingData() {
+    let status;
+    return fetch('/api/posts').then(response => {
+      let status = response.status;
+      return response.json()
+    }).then(data => {
+      console.log("data", data);
+      this.setState({postings: data})
+    });
   }
   
   componentDidMount() {
     document.body.scrollTop = 0;
     document.querySelector('.menu').classList.remove('open');
-    this.getJsonPostingData();
-
+    this.getPostingData();
   }
+
   render() {
 
     console.log(postings);
@@ -32,7 +36,7 @@ class Homepage extends Component {
     return (
       <main className="main">
         {/* {itemData['items'].map((item, i) => <Item itemId={item.id} key={item.id} />)} */}
-        {this.state.postings.map((posting, i) => <Item postingId={posting.id} key={posting.id} />)}      
+        {this.state.postings.map((posting, i) => <Item post={posting} key={posting.id} />)}      
       </main>
     );
   }

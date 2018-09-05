@@ -30,7 +30,7 @@ var postSchema = new Schema({
     lat: String
   },
   userId: {
-    type: String,
+    type: Schema.Types.ObjectId,
     require: true
   },
   created_at: Date,
