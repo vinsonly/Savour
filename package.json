@@ -2,12 +2,12 @@
   "name": "savour",
   "version": "1.0.0",
   "description": "A P2P decentralized food sharing platform",
-  "main": "server/server.js",
+  "main": "server.js",
   "scripts": {
     "client": "cd client && yarn start",
-    "server": "nodemon /server/server.js",
+    "server": "nodemon server.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\" \"sudo service mongod restart\"",
-    "start": "node server/server.js",
+    "start": "node server.js",
     "prod": "concurrently --kill-others-on-fail \"yarn start\" \"yarn client\"",
     "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },

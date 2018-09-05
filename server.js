@@ -30,11 +30,12 @@ app.get('/api/hello', (req, res) => {
 // Authorization: Bearer <access_token>
 
 // set up the set the routes defined in /server/routers to be endpoint
-require('./routes')(app);
+require('./server/routes')(app);
 
 // production
 if (process.env.NODE_ENV === 'production') {
   console.log("running in production");
+  console.log("__dirname", __dirname);
   // Serve any static files
   app.use(express.static(path.join(__dirname, 'client/build')));
   // Handle React routing, return all requests to React app
