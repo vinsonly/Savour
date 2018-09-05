@@ -31,6 +31,16 @@ app.get('/api/hello', (req, res) => {
 // set up the set the routes defined in /server/routers to be endpoint
 require('./routes')(app);
 
+// production
+if (process.env.NODE_ENV === 'production') {
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, 'client/build')));
+  // Handle React routing, return all requests to React app
+  app.get('*', function(req, res) {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+  });
+}
+
 // catch other routes and send 404
 app.get("*", (req, res) => {
   res.status(404).send("Route does not exist");
