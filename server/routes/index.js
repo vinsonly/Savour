@@ -5,6 +5,7 @@ const postsController = require('../controllers').posts
 const ordersController = require('../controllers').orders
 const authController = require('../controllers').auth
 const seedsController = require('../controllers').seeds
+const emailsController = require('../controllers').emails;
 
 module.exports = (app) => {
     // define all routes here
@@ -36,5 +37,7 @@ module.exports = (app) => {
     app.post('/api/login', authController.login);
 
     app.post('/api/seed', seedsController.seedDatabase);
+
+    app.post('/api/send_email', emailsController.sendEmail);
 
 }
