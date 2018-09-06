@@ -38,6 +38,6 @@ module.exports = (app) => {
 
     app.post('/api/seed', seedsController.seedDatabase);
 
-    app.post('/api/send_email', emailsController.sendEmail);
+    app.post('/api/send_email', emailsController.sendPersonalEmail);
 
 }
