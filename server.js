@@ -18,6 +18,9 @@ if( process.env.DB_USER == null
 
 const app = express();
 app.use(bodyParser.json());
+
+console.log("port: ", process.env.PORT)
+
 const port = process.env.PORT || 5000;
 
 app.locals.appName = 'Savour';
