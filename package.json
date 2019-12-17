@@ -30,7 +30,7 @@
     "express": "^4.16.3",
     "faker": "^4.1.0",
     "jsonwebtoken": "^8.3.0",
-    "mongoose": "^5.2.7",
+    "mongoose": "^5.7.5",
     "nodemailer": "^4.6.8",
     "validator": "^10.7.0"
   }
