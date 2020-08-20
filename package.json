@@ -23,7 +23,7 @@
   "homepage": "https://github.com/vinsonly/Savour#readme",
   "dependencies": {
     "app-root-path": "^2.1.0",
-    "bcrypt": "^3.0.0",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.18.3",
     "concurrently": "^3.6.1",
     "dotenv": "^6.0.0",
