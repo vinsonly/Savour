@@ -32,6 +32,6 @@
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.2.7",
     "nodemailer": "^4.6.8",
-    "validator": "^10.7.0"
+    "validator": "^13.7.0"
   }
 }
